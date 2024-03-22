@@ -25,7 +25,7 @@ export default function PasswordReset({ title }) {
             else{
             console.log(JSON.stringify({email, otp, password}));
             
-            const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api-v1/auth/reset-password`, {
+            const response = await fetch(`https://aim-game-backend.vercel.app/api-v1/auth/reset-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

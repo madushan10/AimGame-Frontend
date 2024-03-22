@@ -44,7 +44,7 @@ export default function Login({ title }) {
 
             console.log(JSON.stringify({ email, password }));
 
-            const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api-v1/auth/login`, {
+            const response = await fetch(`https://aim-game-backend.vercel.app/api-v1/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

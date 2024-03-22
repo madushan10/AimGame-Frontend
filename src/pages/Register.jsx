@@ -27,7 +27,7 @@ export default function Register({ title }) {
             else{
             console.log(JSON.stringify({ name,email, password, userRole }));
 
-            const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_BASE_URL}/api-v1/users`, {
+            const response = await fetch(`https://aim-game-backend.vercel.app/api-v1/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
