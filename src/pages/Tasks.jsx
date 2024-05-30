@@ -43,10 +43,13 @@ export default function Tasks() {
     useEffect(() => {
         const fetchWorkspaces = async () => {
             try {
+                document.getElementById("page-loader").style.display = 'block';
                 const response = await api.get('/api-v1/tasks');
                 setTempData(response.data.data);
+                document.getElementById("page-loader").style.display = 'none';
             } catch (error) {
                 console.error('Error fetching workspaces:', error);
+                document.getElementById("page-loader").style.display = 'none';
             }
         };
 
