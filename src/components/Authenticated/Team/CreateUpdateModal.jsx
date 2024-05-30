@@ -61,17 +61,6 @@ export default function CreateUpdateModal({ show, onClose, data }) {
 
     async function onUpdate() {
         // console.log(team)
-        // try {
-        //     const response = await api.put(`/api-v1/team-members/${team._id}`, team);
-        //     if (response.status === 200 || response.status === 201) {
-        //         console.log('Team Member updated successfully');
-        //         onClose();
-        //     } else {
-        //         console.error('Failed to update Team Member:', response.statusText);
-        //     }
-        // } catch (error) {
-        //     console.error('Error updating Team Member:', error);
-        // }
         try {
             const response = await api.put(`/api-v1/team-members/${team._id}`, team);
             if (response.status === 200 || response.status === 201) {
@@ -81,16 +70,8 @@ export default function CreateUpdateModal({ show, onClose, data }) {
                 console.error('Failed to update Team Member:', response.statusText);
             }
         } catch (error) {
-            if (error.response && error.response.status === 400) {
-                // Display validation error
-                console.error('Validation error:', error.response.data.message);
-                // Display the error message to the user, for example:
-                alert(`Error: ${error.response.data.message}`);
-            } else {
-                console.error('Error updating Team Member:', error);
-            }
+            console.error('Error updating Team Member:', error);
         }
-        
     }
     return (
         <Transition
