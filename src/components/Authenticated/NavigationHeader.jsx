@@ -27,8 +27,8 @@ export default function NavigationHeader() {
                 </div>
             </div>
             <div className='hidden lg:flex items-center gap-5' >
-                <img src='/icons/settings.svg' className='h-5' />
-                <HeaderNotification />
+            <a href='/' ><img src='/icons/turn-off.svg' className='h-5' /></a>
+                {/* <HeaderNotification /> */}
                 <HeaderUser />
             </div>
         </div>
