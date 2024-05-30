@@ -31,7 +31,8 @@ export default function CreateUpdateModal({ show, onClose, data }) {
     const [team, setTeam] = useState(initialState)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null);
-
+    const [success, setSuccess] = useState(null);
+    
     useEffect(() => {
         if (data) {
             setTeam(data)
@@ -81,7 +82,7 @@ export default function CreateUpdateModal({ show, onClose, data }) {
                 const response = await api.put(`/api-v1/team-members/${team._id}`, team);
             if (response.status === 200 || response.status === 201) {
                 console.log('Team Member updated successfully');
-                onClose();
+                setSuccess("Team Member updated successfully.");
             } else {
                 console.error('Failed to update Team Member:', response.statusText);
             }
@@ -171,8 +172,10 @@ export default function CreateUpdateModal({ show, onClose, data }) {
                             label={"Contact Number"}
                             placeholder={"Enter Contact Number"}
                         />
-                        {error && <p className="text-red-500">{error}</p>}
+                       
                     </div>
+                    {error && <p className="text-red-500 mt-2 mb-2">{error}</p>}
+                    {success && <p className="text-green-500 mt-2 mb-2">{success}</p>}
                     <div className='flex justify-center items-center gap-5 mb-5 mt-10' >
                         <button
                             onClick={onClose}
