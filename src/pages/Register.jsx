@@ -26,7 +26,7 @@ export default function Register({ title }) {
             }
             else{
             console.log(JSON.stringify({ name,email, password, userRole }));
-
+            document.getElementById("page-loader").style.display = 'block';
             const response = await fetch(`https://aim-game-backend.vercel.app/api-v1/users`, {
                 method: 'POST',
                 headers: {
@@ -36,6 +36,7 @@ export default function Register({ title }) {
             });
 
             if (!response.ok) {
+                document.getElementById("page-loader").style.display = 'none';
                 const errorData = await response.json();
                 if(errorData.errors == "Email Already registered, But OTP is not confirmed"){
                     setError(errorData.errors);
@@ -48,6 +49,7 @@ export default function Register({ title }) {
                 }
                 
             } else {
+                document.getElementById("page-loader").style.display = 'none';
                 //const data = await response.json();
                 localStorage.setItem('otpEmail', email);
                 localStorage.setItem('verifyType', 'admin');
