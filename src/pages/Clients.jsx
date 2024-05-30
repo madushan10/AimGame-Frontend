@@ -128,7 +128,7 @@ export default function Clients({ title }) {
     };
     const fetchClients = async () => {
         try {
-            document.getElementById("page-loader").style.display = 'blovk';
+            document.getElementById("page-loader").style.display = 'block';
             const response = await api.get('/api-v1/clients');
             setAllClients(response.data.data);
             document.getElementById("page-loader").style.display = 'none';
