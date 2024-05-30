@@ -59,7 +59,7 @@ export default function CreateUpdateModal({ show, onClose, data }) {
     async function onUpdate() {
         // console.log(team)
         try {
-            const response = await api.post(`/api-v1/team-members/${team._id}`, team);
+            const response = await api.put(`/api-v1/team-members/${team._id}`, team);
 
             if (response.status === 200 || response.status === 201) {
                 console.log('Team Member updated successfully');
