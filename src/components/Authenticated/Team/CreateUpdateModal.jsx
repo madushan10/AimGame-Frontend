@@ -30,6 +30,7 @@ export default function CreateUpdateModal({ show, onClose, data }) {
 
     const [team, setTeam] = useState(initialState)
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         if (data) {
@@ -44,12 +45,14 @@ export default function CreateUpdateModal({ show, onClose, data }) {
         // console.log('Team : ',team);
         try {
             const response = await api.post('/api-v1/team-members', team);
-
+            console.log("TEAM RESPONSE",response);
             if (response.status === 201) {
                 console.log('Team Member created successfully');
+                
                 onClose();
             } else {
                 console.error('Failed to create Team Member:', response.statusText);
+                setError(errorData.errors);
             }
         } catch (error) {
             console.error('Error creating client:', error);
@@ -151,6 +154,7 @@ export default function CreateUpdateModal({ show, onClose, data }) {
                             label={"Contact Number"}
                             placeholder={"Enter Contact Number"}
                         />
+                        {error && <p className="text-red-500">{error}</p>}
                     </div>
                     <div className='flex justify-center items-center gap-5 mb-5 mt-10' >
                         <button
