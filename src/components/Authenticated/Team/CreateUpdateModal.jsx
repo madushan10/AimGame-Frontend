@@ -43,6 +43,20 @@ export default function CreateUpdateModal({ show, onClose, data }) {
 
     async function onCreate() {
         // console.log('Team : ',team);
+        // try {
+        //     const response = await api.post('/api-v1/team-members', team);
+        //     console.log("TEAM RESPONSE",response);
+        //     if (response.status === 201) {
+        //         console.log('Team Member created successfully');
+                
+        //         onClose();
+        //     } else {
+        //         console.error('Failed to create Team Member:', response.statusText);
+        //         setError(errorData.errors);
+        //     }
+        // } catch (error) {
+        //     console.error('Error creating client:', error);
+        // }
         try {
             const response = await api.post('/api-v1/team-members', team);
             console.log("TEAM RESPONSE", response);
@@ -56,14 +70,26 @@ export default function CreateUpdateModal({ show, onClose, data }) {
         } catch (error) {
             console.error('Error creating client:', error);
             if (error.response) {
-                console.error('Response data:', error.response.data);
-                setError(error.response.data.errors);
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                if (error.response.status === 422) {
+                    console.error('Validation error:', error.response.data);
+                    setError(error.response.data.errors);
+                } else {
+                    console.error('Response error:', error.response.status, error.response.data);
+                    setError(error.response.data.errors);
+                }
             } else if (error.request) {
+                // The request was made but no response was received
                 console.error('No response received:', error.request);
+                setError('No response received from the server.');
             } else {
+                // Something happened in setting up the request that triggered an Error
                 console.error('Error:', error.message);
+                setError('An error occurred while creating the team member.');
             }
         }
+        
     }
 
     async function onUpdate() {
