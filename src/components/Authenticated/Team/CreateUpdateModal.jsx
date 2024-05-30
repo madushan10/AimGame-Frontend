@@ -65,24 +65,30 @@ export default function CreateUpdateModal({ show, onClose, data }) {
         try {
             if(team.name === null|| team.name === ""){
                 setError("Name is required.");
+                setSuccess(null);
             }
             else if(team.designation === null || team.designation === ""){
                 setError("Designation is required.");
+                setSuccess(null);
             }
             else if(team.userRole === null || team.userRole === ""){
                 setError("Role is required.");
+                setSuccess(null);
             }
             else if(team.email === null || team.email === ""){
                 setError("Email is required.");
+                setSuccess(null);
             }
             else if(team.phone === null || team.phone === ""){
                 setError("phone is required.");
+                setSuccess(null);
             }
             else{
                 const response = await api.put(`/api-v1/team-members/${team._id}`, team);
             if (response.status === 200 || response.status === 201) {
                 console.log('Team Member updated successfully');
                 setSuccess("Team Member updated successfully.");
+                setError(null);
             } else {
                 console.error('Failed to update Team Member:', response.statusText);
             }
@@ -174,8 +180,11 @@ export default function CreateUpdateModal({ show, onClose, data }) {
                         />
                        
                     </div>
+                    <div className='gap-5 mb-5' >
                     {error && <p className="text-red-500 mt-2 mb-2">{error}</p>}
                     {success && <p className="text-green-500 mt-2 mb-2">{success}</p>}
+                    </div>
+                   
                     <div className='flex justify-center items-center gap-5 mb-5 mt-10' >
                         <button
                             onClick={onClose}
