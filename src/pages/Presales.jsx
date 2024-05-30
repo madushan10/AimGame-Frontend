@@ -22,7 +22,7 @@ export default function Teams({ title }) {
     useEffect(() => {
         const fetchOpportunities = async () => {
             try {
-                const response = await api.get(`/api-v1/team-members`);
+                const response = await api.get(`/api-v1/team-members/designation/presales`);
                 setTempData(response.data.data);
             } catch (error) {
                 console.error('Error fetching opportunities:', error);
