@@ -38,6 +38,7 @@ export default function Register({ title }) {
             if (!response.ok) {
                 const errorData = await response.json();
                 if(errorData.errors == "Email Already registered, But OTP is not confirmed"){
+                    setError(errorData.errors);
                     localStorage.setItem('otpEmail', email);
                     localStorage.setItem('verifyType', 'admin');
                     navigateTo('/password-reset/verify');
