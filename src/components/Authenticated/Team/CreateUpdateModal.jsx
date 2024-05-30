@@ -62,13 +62,31 @@ export default function CreateUpdateModal({ show, onClose, data }) {
     async function onUpdate() {
         // console.log(team)
         try {
-            const response = await api.put(`/api-v1/team-members/${team._id}`, team);
+            if(team.name == null){
+                setError("Name is required.");
+            }
+            else if(team.designation == null){
+                setError("Designation is required.");
+            }
+            else if(team.userRole == null){
+                setError("Role is required.");
+            }
+            else if(team.email == null){
+                setError("Email is required.");
+            }
+            else if(team.phone == null){
+                setError("phone is required.");
+            }
+            else{
+                const response = await api.put(`/api-v1/team-members/${team._id}`, team);
             if (response.status === 200 || response.status === 201) {
                 console.log('Team Member updated successfully');
                 onClose();
             } else {
                 console.error('Failed to update Team Member:', response.statusText);
             }
+            }
+            
         } catch (error) {
             console.error('Error updating Team Member:', error);
         }
