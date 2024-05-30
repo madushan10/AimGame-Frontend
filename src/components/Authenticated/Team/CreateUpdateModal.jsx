@@ -63,13 +63,21 @@ export default function CreateUpdateModal({ show, onClose, data }) {
         // console.log(team)
         try {
             const response = await api.put(`/api-v1/team-members/${team._id}`, team);
-            console.log("TEAM RESPONSE",response);
-            if (response.status === 200 || response.status === 201) {
+            const errorData = await response.json();
+            console.log("TEAM RESPONSE",errorData);
+            if (!response.ok) {
+                setError(errorData.errors);
+            }
+            else{
                 console.log('Team Member updated successfully');
                 onClose();
-            } else {
-                console.error('Failed to update Team Member:', response.statusText);
             }
+            // if (response.status === 200 || response.status === 201) {
+            //     console.log('Team Member updated successfully');
+            //     onClose();
+            // } else {
+            //     console.error('Failed to update Team Member:', response.statusText);
+            // }
         } catch (error) {
             console.error('Error updating Team Member:', error);
         }
