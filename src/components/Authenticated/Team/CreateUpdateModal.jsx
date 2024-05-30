@@ -62,19 +62,19 @@ export default function CreateUpdateModal({ show, onClose, data }) {
     async function onUpdate() {
         // console.log(team)
         try {
-            if(team.name === null){
+            if(team.name === null|| team.name === ""){
                 setError("Name is required.");
             }
-            else if(team.designation === null){
+            else if(team.designation === null || team.designation === ""){
                 setError("Designation is required.");
             }
-            else if(team.userRole === null){
+            else if(team.userRole === null || team.userRole === ""){
                 setError("Role is required.");
             }
-            else if(team.email === null){
+            else if(team.email === null || team.email === ""){
                 setError("Email is required.");
             }
-            else if(team.phone === null){
+            else if(team.phone === null || team.phone === ""){
                 setError("phone is required.");
             }
             else{
