@@ -18,10 +18,12 @@ const tempData = [
 export default function PartnerCard() {
     const [loading, setLoading] = useState(false)
     const [tempData, setTempData] = useState([]);
-    document.getElementById("page-loader").style.display = 'block';
+
     useEffect(() => {
+        
         const fetchData = async () => {
           try {
+            document.getElementById("page-loader").style.display = 'block';
             const response = await api.get(`/api-v1/partners`);
             setTempData(response.data.data);
             document.getElementById("page-loader").style.display = 'none';
