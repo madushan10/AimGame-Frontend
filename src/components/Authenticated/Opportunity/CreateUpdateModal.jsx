@@ -93,7 +93,8 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
     const [loading, setLoading] = useState(false)
     const [mappingRoles, setMappingRoles] = useState([]);
     const [message, setMessage] = useState('');
-
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
     // const opportunityMappingRoles = data.opportunityMappingRoles;
 
 
@@ -140,7 +141,9 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
 
 
             if (missingFields.length > 0) {
-                window.alert(`Please fill in all required fields: ${missingFields.join(', ')}.`);
+                setSuccess(null);
+                setError(`Please fill in all required fields: ${missingFields.join(', ')}.`);
+                //window.alert(`Please fill in all required fields: ${missingFields.join(', ')}.`);
                 return;
             }
             // console.log("opportunity : ", updatedOpportunity)
@@ -179,6 +182,25 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
 
     async function onUpdate() {
         console.log("Update data:", opportunity)
+        const missingFields = [];
+        if (!opportunity.referenceNumber) missingFields.push('Reference Number');
+        if (!opportunity.name) missingFields.push('Name');
+        if (!opportunity.workspaceId) missingFields.push('Workspace');
+        if (!opportunity.clientId) missingFields.push('Client');
+        if (!opportunity.leadId) missingFields.push('Lead');
+
+        if (!opportunity.funnelStatusId) missingFields.push('Funnel Status');
+        if (!opportunity.completionDate) missingFields.push('Completion Date');
+        if (!opportunity.partners) missingFields.push('Partners');
+        if (!opportunity.team) missingFields.push('Team Members');
+
+
+        if (missingFields.length > 0) {
+            setSuccess(null);
+            setError(`Please fill in all required fields: ${missingFields.join(', ')}.`);
+            //window.alert(`Please fill in all required fields: ${missingFields.join(', ')}.`);
+            return;
+        }
         const updatedOpportunity = {
             ...opportunity,
             completionDate: opportunity.completionDate || null,
@@ -562,6 +584,10 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                                 </div>
                             </div>
                         }
+                    </div>
+                    <div className='px-10 ' >
+                    {error && <p className="text-red-500 mt-2 mb-2">{error}</p>}
+                    {success && <p className="text-green-500 mt-2 mb-2">{success}</p>}
                     </div>
                     <div className='flex justify-center items-center gap-5 mb-5' >
                         {/* {message && (
