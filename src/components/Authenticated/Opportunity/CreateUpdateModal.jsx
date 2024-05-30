@@ -163,19 +163,23 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
             const response = await api.post('/api-v1/opportunities', updatedOpportunity);
 
             if (response.status === 201) {
-                setMessage('Opportunity created successfully');
-
+                //setMessage('Opportunity created successfully');
+                setError(null);
+                setSuccess(`Opportunity created successfully`);
+                
                 // console.log('Opportunity created successfully');
-                window.alert('Opportunity created successfully');
-                onClose();
+                //window.alert('Opportunity created successfully');
+                //onClose();
             } else {
-                setMessage('Failed to create opportunity');
-                window.alert('Failed to create opportunity');
+                //setMessage('Failed to create opportunity');
+                //window.alert('Failed to create opportunity');
+                setSuccess(null);
+                setError(`Failed to create opportunity`);
                 // console.error('Failed to create opportunity:', response.statusText);
             }
         } catch (error) {
-            setMessage('Error creating opportunity');
-            window.alert('Failed ');
+            setSuccess(null);
+            setError(`Failed to create opportunity`);
             // console.error('Error creating opportunity:', error);
         }
     }
@@ -214,18 +218,18 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
             const response = await api.put(`/api-v1/opportunities/${opportunity._id}`, updatedOpportunity);
 
             if (response.status === 200 || response.status === 201) {
-                setMessage('Opportunity updated successfully');
-                window.alert('Opportunity updated successfully');
+                setError(null);
+                setSuccess(`Opportunity updated successfully`);
                 // console.log('Client updated successfully');
                 onClose();
             } else {
-                window.alert('Failed to update opportunity');
-                setMessage('Failed to update opportunity');
+                setSuccess(null);
+                setError(`Failed to update opportunity`);
                 // console.error('Failed to update client:', response.statusText);
             }
         } catch (error) {
-            setMessage('Error updating opportunity');
-            window.alert('Failed to update opportunity');
+            setSuccess(null);
+            setError(`Failed to update opportunity`);
             // console.error('Error updating client:', error);
         }
     }
@@ -360,7 +364,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                             value={funnelStatus?.find(row => row?.status === opportunity?.funnelStatusId?.status)}
                             onChange={handleFunnelStatusChange}
                             label={"Funnel Status"}
-                            placeholder={""}
+                            placeholder={"Please Select A Status"}
                             options={funnelStatus ?? []}
                         />
                         <div className="d-flex">
