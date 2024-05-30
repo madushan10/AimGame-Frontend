@@ -221,7 +221,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                 setError(null);
                 setSuccess(`Opportunity updated successfully`);
                 // console.log('Client updated successfully');
-                onClose();
+                //onClose();
             } else {
                 setSuccess(null);
                 setError(`Failed to update opportunity`);
