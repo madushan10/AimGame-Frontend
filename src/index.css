@@ -41,11 +41,12 @@ table th{
     position: absolute;
     background: #2727273d;
     z-index: 1000;
+   
   }
 
   .spinner {
     position: relative;
-    top: 35%;
+    top: 40%;
     width: 80px;
     height: 80px;
     margin: 0 auto;

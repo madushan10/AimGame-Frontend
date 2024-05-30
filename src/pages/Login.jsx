@@ -39,6 +39,7 @@ export default function Login({ title }) {
  
         
         try {
+            document.getElementById("page-loader").style.display = 'block';
             const email = e.target.email.value;
             const password = e.target.password.value;
 
@@ -53,9 +54,11 @@ export default function Login({ title }) {
             });
 
             if (!response.ok) {
+                document.getElementById("page-loader").style.display = 'none';
                 const errorData = await response.json();
                 setError(errorData.msg);
             } else {
+                document.getElementById("page-loader").style.display = 'none';
                 const data = await response.json();
                 localStorage.setItem('accessToken', data.token);
                 localStorage.setItem('userID', data.userID);
