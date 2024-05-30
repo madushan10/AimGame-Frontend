@@ -22,10 +22,13 @@ export default function Teams({ title }) {
     useEffect(() => {
         const fetchOpportunities = async () => {
             try {
+                document.getElementById("page-loader").style.display = 'block';
                 const response = await api.get(`/api-v1/team-members/designation/presales`);
                 setTempData(response.data.data);
+                document.getElementById("page-loader").style.display = 'none';
             } catch (error) {
                 console.error('Error fetching opportunities:', error);
+                document.getElementById("page-loader").style.display = 'none';
             }
         };
 
