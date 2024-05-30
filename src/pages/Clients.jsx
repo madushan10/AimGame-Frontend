@@ -128,11 +128,14 @@ export default function Clients({ title }) {
     };
     const fetchClients = async () => {
         try {
+            document.getElementById("page-loader").style.display = 'blovk';
             const response = await api.get('/api-v1/clients');
             setAllClients(response.data.data);
+            document.getElementById("page-loader").style.display = 'none';
             console.log("allClients2 : ", response.data.data)
         } catch (error) {
             console.error('Error fetching workspaces:', error);
+            document.getElementById("page-loader").style.display = 'none';
         }
     };
 
