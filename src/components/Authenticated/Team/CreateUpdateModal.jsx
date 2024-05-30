@@ -63,7 +63,7 @@ export default function CreateUpdateModal({ show, onClose, data }) {
         // console.log(team)
         try {
             const response = await api.put(`/api-v1/team-members/${team._id}`, team);
-
+            console.log("TEAM RESPONSE",response);
             if (response.status === 200 || response.status === 201) {
                 console.log('Team Member updated successfully');
                 onClose();
