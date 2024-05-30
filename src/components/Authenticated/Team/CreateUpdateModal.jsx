@@ -45,17 +45,24 @@ export default function CreateUpdateModal({ show, onClose, data }) {
         // console.log('Team : ',team);
         try {
             const response = await api.post('/api-v1/team-members', team);
-            console.log("TEAM RESPONSE",response);
+            console.log("TEAM RESPONSE", response);
             if (response.status === 201) {
                 console.log('Team Member created successfully');
-                
                 onClose();
             } else {
                 console.error('Failed to create Team Member:', response.statusText);
-                setError(errorData.errors);
+                setError(response.data.errors);
             }
         } catch (error) {
             console.error('Error creating client:', error);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                setError(error.response.data.errors);
+            } else if (error.request) {
+                console.error('No response received:', error.request);
+            } else {
+                console.error('Error:', error.message);
+            }
         }
     }
 
@@ -63,21 +70,12 @@ export default function CreateUpdateModal({ show, onClose, data }) {
         // console.log(team)
         try {
             const response = await api.put(`/api-v1/team-members/${team._id}`, team);
-            const errorData = await response.json();
-            console.log("TEAM RESPONSE",errorData);
-            if (!response.ok) {
-                setError(errorData.errors);
-            }
-            else{
+            if (response.status === 200 || response.status === 201) {
                 console.log('Team Member updated successfully');
                 onClose();
+            } else {
+                console.error('Failed to update Team Member:', response.statusText);
             }
-            // if (response.status === 200 || response.status === 201) {
-            //     console.log('Team Member updated successfully');
-            //     onClose();
-            // } else {
-            //     console.error('Failed to update Team Member:', response.statusText);
-            // }
         } catch (error) {
             console.error('Error updating Team Member:', error);
         }
