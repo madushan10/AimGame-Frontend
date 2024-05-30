@@ -180,7 +180,7 @@ export default function CreateUpdateModal({ show, onClose, data }) {
                         />
                        
                     </div>
-                    <div className='gap-5 mb-5' >
+                    <div className='px-10 ' >
                     {error && <p className="text-red-500 mt-2 mb-2">{error}</p>}
                     {success && <p className="text-green-500 mt-2 mb-2">{success}</p>}
                     </div>
