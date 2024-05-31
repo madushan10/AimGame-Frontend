@@ -42,60 +42,124 @@ export default function CreateUpdateModal({ show, onClose, data }) {
         }
     }, [data])
 
+    // async function onCreate() {
+    //     // console.log('Team : ',team);
+    //     try {
+    //         const response = await api.post('/api-v1/team-members', team);
+    //         console.log("TEAM RESPONSE",response);
+    //         if (response.status === 201) {
+    //             console.log('Team Member created successfully');
+                
+    //             onClose();
+    //         } else {
+    //             console.error('Failed to create Team Member:', response.statusText);
+    //             setError(errorData.errors);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error creating client:', error);
+    //     }
+    // }
     async function onCreate() {
-        // console.log('Team : ',team);
+        setLoading(true);
+        setError(null);
         try {
             const response = await api.post('/api-v1/team-members', team);
-            console.log("TEAM RESPONSE",response);
             if (response.status === 201) {
                 console.log('Team Member created successfully');
-                
                 onClose();
             } else {
                 console.error('Failed to create Team Member:', response.statusText);
-                setError(errorData.errors);
+                setError(response.data.errors);
             }
         } catch (error) {
             console.error('Error creating client:', error);
+            setError(error.message);
         }
+        setLoading(false);
     }
 
+    // async function onUpdate() {
+    //     // console.log(team)
+    //     try {
+    //         if(team.name === null|| team.name === ""){
+    //             setError("Name is required.");
+    //             setSuccess(null);
+    //         }
+    //         else if(team.designation === null || team.designation === ""){
+    //             setError("Designation is required.");
+    //             setSuccess(null);
+    //         }
+    //         else if(team.userRole === null || team.userRole === ""){
+    //             setError("Role is required.");
+    //             setSuccess(null);
+    //         }
+    //         else if(team.email === null || team.email === ""){
+    //             setError("Email is required.");
+    //             setSuccess(null);
+    //         }
+    //         else if(team.phone === null || team.phone === ""){
+    //             setError("phone is required.");
+    //             setSuccess(null);
+    //         }
+    //         else{
+    //             const response = await api.put(`/api-v1/team-members/${team._id}`, team);
+    //         if (response.status === 200 || response.status === 201) {
+    //             console.log('Team Member updated successfully');
+    //             setSuccess("Team Member updated successfully.");
+    //             setError(null);
+    //         } else {
+    //             console.error('Failed to update Team Member:', response.statusText);
+    //         }
+    //         }
+            
+    //     } catch (error) {
+    //         console.error('Error updating Team Member:', error);
+    //     }
+    // }
     async function onUpdate() {
-        // console.log(team)
+        setLoading(true);
+        setError(null);
         try {
-            if(team.name === null|| team.name === ""){
+            if (!team.name) {
                 setError("Name is required.");
                 setSuccess(null);
-            }
-            else if(team.designation === null || team.designation === ""){
+            } else if (!team.designation) {
                 setError("Designation is required.");
                 setSuccess(null);
-            }
-            else if(team.userRole === null || team.userRole === ""){
+            } else if (!team.userRole) {
                 setError("Role is required.");
                 setSuccess(null);
-            }
-            else if(team.email === null || team.email === ""){
+            } else if (!team.email) {
                 setError("Email is required.");
                 setSuccess(null);
-            }
-            else if(team.phone === null || team.phone === ""){
-                setError("phone is required.");
+            } else if (!team.phone) {
+                setError("Phone is required.");
                 setSuccess(null);
-            }
-            else{
-                const response = await api.put(`/api-v1/team-members/${team._id}`, team);
-            if (response.status === 200 || response.status === 201) {
-                console.log('Team Member updated successfully');
-                setSuccess("Team Member updated successfully.");
-                setError(null);
             } else {
-                console.error('Failed to update Team Member:', response.statusText);
+                const response = await api.put(`/api-v1/team-members/${team._id}`, team);
+                if (response.status === 200 || response.status === 201) {
+                    console.log('Team Member updated successfully');
+                    setSuccess("Team Member updated successfully.");
+                    setError(null);
+                } else {
+                    console.error('Failed to update Team Member:', response.statusText);
+                    setError(response.data.errors);
+                }
             }
-            }
-            
         } catch (error) {
             console.error('Error updating Team Member:', error);
+            setError(error.message);
+        }
+        setLoading(false);
+    }
+    function handleImageChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setTeam({ ...team, image: reader.result });
+            };
+            reader.readAsDataURL(file);
         }
     }
     return (
@@ -122,7 +186,7 @@ export default function CreateUpdateModal({ show, onClose, data }) {
                     <div className='flex justify-center items-center mt-5' >
                         <MainImageInput
                             type="client"
-                            onChange={file => setTeam({ ...team, image: file.path })}
+                            onChange={handleImageChange}
                             value={team?.image}
                         />
                     </div>

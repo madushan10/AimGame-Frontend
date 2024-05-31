@@ -46,7 +46,7 @@ export default function Teams({ title }) {
             setLoading(false)
         }, 3000);
     }, [loading])
-
+ 
 
     return (
         <AuthenticatedLayout>
