@@ -286,6 +286,10 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
     const selectedLead = leadData?.find(lead => lead._id === opportunity?.leadId);
     console.log("Selected Lead:", selectedLead);
 
+    const selectedWorkspace = allworkspaces?.find(workspace => workspace._id === opportunity?.workspaceId);
+    console.log("Selected Lead:", selectedWorkspace);
+    // allworkspaces?.find(row => row?.name === opportunity?.workspaceId?.name)
+
     return (
         <Transition
             show={show}
@@ -481,9 +485,10 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                                 </button>
                             </div>
                         </div>
-                        <MainSelect
+                        <MainSelectLead
                             disabled={loading}
-                            value={allworkspaces?.find(row => row?.name === opportunity?.workspaceId?.name)}
+                            // value={allworkspaces?.find(row => row?.name === opportunity?.workspaceId?.name)}
+value={selectedWorkspace}
                             onChange={value => setOpportunity({
                                 ...opportunity,
                                 workspaceId: value?._id || ''
