@@ -42,22 +42,40 @@ export default function CreateUpdateModal({ show, onClose, data }) {
         }
     }, [data])
 
+    // async function onCreate() {
+    //     // console.log('Team : ',team);
+    //     try {
+    //         const response = await api.post('/api-v1/team-members', team);
+    //         console.log("TEAM RESPONSE",response);
+    //         if (response.status === 201) {
+    //             console.log('Team Member created successfully');
+                
+    //             onClose();
+    //         } else {
+    //             console.error('Failed to create Team Member:', response.statusText);
+    //             setError(errorData.errors);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error creating client:', error);
+    //     }
+    // }
     async function onCreate() {
-        // console.log('Team : ',team);
+        setLoading(true);
+        setError(null);
         try {
             const response = await api.post('/api-v1/team-members', team);
-            console.log("TEAM RESPONSE",response);
             if (response.status === 201) {
                 console.log('Team Member created successfully');
-                
                 onClose();
             } else {
                 console.error('Failed to create Team Member:', response.statusText);
-                setError(errorData.errors);
+                setError(response.data.errors);
             }
         } catch (error) {
             console.error('Error creating client:', error);
+            setError(error.message);
         }
+        setLoading(false);
     }
 
     async function onUpdate() {
@@ -98,6 +116,52 @@ export default function CreateUpdateModal({ show, onClose, data }) {
             console.error('Error updating Team Member:', error);
         }
     }
+    // async function onUpdate() {
+    //     setLoading(true);
+    //     setError(null);
+    //     try {
+    //         if (!team.name) {
+    //             setError("Name is required.");
+    //             setSuccess(null);
+    //         } else if (!team.designation) {
+    //             setError("Designation is required.");
+    //             setSuccess(null);
+    //         } else if (!team.userRole) {
+    //             setError("Role is required.");
+    //             setSuccess(null);
+    //         } else if (!team.email) {
+    //             setError("Email is required.");
+    //             setSuccess(null);
+    //         } else if (!team.phone) {
+    //             setError("Phone is required.");
+    //             setSuccess(null);
+    //         } else {
+    //             const response = await api.put(`/api-v1/team-members/${team._id}`, team);
+    //             if (response.status === 200 || response.status === 201) {
+    //                 console.log('Team Member updated successfully');
+    //                 setSuccess("Team Member updated successfully.");
+    //                 setError(null);
+    //             } else {
+    //                 console.error('Failed to update Team Member:', response.statusText);
+    //                 setError(response.data.errors);
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error('Error updating Team Member:', error);
+    //         setError(error.message);
+    //     }
+    //     setLoading(false);
+    // }
+    // function handleImageChange(event) {
+    //     const file = event.target.files[0];
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         reader.onloadend = () => {
+    //             setTeam({ ...team, image: reader.result });
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // }
     return (
         <Transition
             show={show}
@@ -120,11 +184,22 @@ export default function CreateUpdateModal({ show, onClose, data }) {
                 </div>
                 <div className='max-h-[80vh] h-[80vh] lg:h-fit overflow-scroll no-scrollbar' >
                     <div className='flex justify-center items-center mt-5' >
-                        <MainImageInput
+                        {/* <MainImageInput
                             type="client"
-                            onChange={file => setTeam({ ...team, image: file.path })}
+                            onChange={handleImageChange}
                             value={team?.image}
-                        />
+                        /> */}
+                        <MainImageInput
+    type="client"
+    onChange={file => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setTeam({ ...team, image: reader.result });
+        };
+        reader.readAsDataURL(file);
+    }}
+    value={team?.image}
+/>
                     </div>
                     <div className='grid gap-5 grid-cols-1 lg:grid-cols-2 px-10 pt-10' >
                         <MainInput
