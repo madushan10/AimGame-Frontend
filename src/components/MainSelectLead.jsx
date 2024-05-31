@@ -16,9 +16,9 @@ export default function MainSelectLead({ options, label, placeholder, value, onC
                     .includes(query.toLowerCase().replace(/\s+/g, ''))
             )
 
- console.log("OP Data On Main Select label: ", label);
+//  console.log("OP Data On Main Select label: ", label);
             // console.log("OP Data On Main Select all options: ", filteredOptions);
-            console.log("OP Data On Main Selected value: ", value);
+            // console.log("OP Data On Main Selected value: ", value);
 
 
     const getHeight = () => {

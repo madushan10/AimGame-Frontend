@@ -18,6 +18,7 @@ import MainMultipleSelectTasks from '../../MainMultipleSelectTasks'
 import MainDateInput from '../../MainDateInput'
 import MainRequiredInput from '../MainRequiredInput'
 import MainSelectLead from '../../MainSelectLead'
+import MainMultipleSelectTeam from '../../MainMultipleSelectTeam'
 
 const designations = [
     { id: 1, name: 'Head of Sales' },
@@ -284,11 +285,19 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
     // }
 
     const selectedLead = leadData?.find(lead => lead._id === opportunity?.leadId);
-    console.log("Selected Lead:", selectedLead);
+    // console.log("Selected Lead:", selectedLead);
 
     const selectedWorkspace = allworkspaces?.find(workspace => workspace._id === opportunity?.workspaceId);
-    console.log("Selected Lead:", selectedWorkspace);
+    // console.log("Selected Lead:", selectedWorkspace);
     // allworkspaces?.find(row => row?.name === opportunity?.workspaceId?.name)
+
+    const teamMemberIds = Array.isArray(opportunity.team) ? opportunity.team.map(member => member._id) : [];
+    console.log("teamMemberIds : ", teamMemberIds)
+
+
+    console.log("partners : ", partners)
+    console.log("teamMembers : ", teamMembers)
+    console.log("opportunity : ", opportunity)
 
     return (
         <Transition
@@ -497,7 +506,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                             placeholder={"Please Select Workspace"}
                             options={allworkspaces ?? []}
                         />
-                        <MainMultipleSelect
+                        <MainMultipleSelectTeam
                             key={JSON.stringify(opportunity.team)}
                             disabled={loading}
                             value={opportunity.team}
@@ -509,7 +518,8 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                             }}
                             label={"Team Members"}
                             placeholder={""}
-                            options={teamMembers.map(member => ({ _id: member._id, name: member.name }))}
+                            // options={teamMembers.map(member => ({ _id: member._id, name: member.name }))}
+                            options={teamMembers}
                         />
                         <div>
 

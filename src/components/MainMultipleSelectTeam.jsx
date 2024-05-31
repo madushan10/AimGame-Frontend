@@ -4,7 +4,7 @@ import { Combobox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { Chip } from '@mui/material'
 
-export default function MainMultipleSelect({ options, label, placeholder, onDeleteItem, value = [], onChange, disabled }) {
+export default function MainMultipleSelectTeam({ options, label, placeholder, onDeleteItem, value = [], onChange, disabled }) {
     const [query, setQuery] = useState('');
 
     const filteredOptions = query === ''
@@ -48,14 +48,14 @@ export default function MainMultipleSelect({ options, label, placeholder, onDele
                     {value.length > 0 && (
 
                         <div className='flex flex-wrap gap-1 my-3'>
-                            {value.map((optionId, index) => {
-                                const selectedOption = options.find(option => option._id === optionId);
-                                // console.log("chip : ", selectedOption);
-
+                            {value.map((option, index) => {
+    const selectedOption = options.find(opt => opt._id === option._id);
+    // console.log("chip : ", selectedOption);
+                                const name = selectedOption ? selectedOption.name : "Unknown";
                                 return (
                                     <Chip
-                                        key={optionId}
-                                        label={selectedOption ? selectedOption.name : 'Unknown'}
+                                        key={option._id}
+                                        label={name}
                                         onDelete={() => onDeleteItem(index)}
                                     />
                                 );
@@ -78,7 +78,7 @@ export default function MainMultipleSelect({ options, label, placeholder, onDele
                                 filteredOptions.map((option) => (
                                     <Combobox.Option
                                         key={option._id}
-                                        value={option._id}
+                                        value={option}
                                         className={({ active }) =>
                                             `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-app-blue text-white' : 'text-gray-900'
                                             }`
