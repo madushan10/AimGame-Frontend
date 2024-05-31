@@ -76,18 +76,23 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
             // }
 
             const headers = { 'Content-Type': 'multipart/form-data' };
+            document.getElementById("page-loader").style.display = 'block';
             const response = await api.post('/api-v1/clients', formData, {headers} );
             console.log(response);
             if (response.status === 201) {
                 console.log('Client created successfully');
+                document.getElementById("page-loader").style.display = 'none';
                 window.alert('Client created successfully');
+                
                 onClose();
             } else {
                 console.error('Failed to create client:', response.statusText);
+                document.getElementById("page-loader").style.display = 'none';
                 window.alert(response.statusText);
             }
         } catch (error) {
             console.error('Error creating client:', error);
+            document.getElementById("page-loader").style.display = 'none';
             window.alert('Failed to create client');
         }
     }

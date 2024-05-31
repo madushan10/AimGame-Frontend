@@ -36,15 +36,19 @@ export default function ClientCreateUpdateModal({ show, onClose, data, industryT
     // create client
     async function onCreate() {
         try {
+            document.getElementById("page-loader").style.display = 'block';
             const response = await api.post('/api-v1/clients', client);
 
             if (response.status === 201) {
                 console.log('Client created successfully');
+                document.getElementById("page-loader").style.display = 'none';
                 onClose();
             } else {
                 console.error('Failed to create client:', response.statusText);
+                document.getElementById("page-loader").style.display = 'none';
             }
         } catch (error) {
+            document.getElementById("page-loader").style.display = 'none';
             console.error('Error creating client:', error);
         }
     }
@@ -53,15 +57,19 @@ export default function ClientCreateUpdateModal({ show, onClose, data, industryT
     async function onUpdate() {
         console.log(client)
         try {
+            document.getElementById("page-loader").style.display = 'block';
             const response = await api.put(`/api-v1/clients/${client._id}`, client);
 
             if (response.status === 200 || response.status === 201) {
                 console.log('Client updated successfully');
+                document.getElementById("page-loader").style.display = 'none';
                 onClose();
             } else {
                 console.error('Failed to update client:', response.statusText);
+                document.getElementById("page-loader").style.display = 'none';
             }
         } catch (error) {
+            document.getElementById("page-loader").style.display = 'none';
             console.error('Error updating client:', error);
         }
     }

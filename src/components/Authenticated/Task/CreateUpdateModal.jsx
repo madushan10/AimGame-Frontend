@@ -46,15 +46,19 @@ export default function CreateUpdateModal({ show, onClose, data, funnelStatus, r
         };
         // console.log("task data : ",taskPayload);
         try {
+            document.getElementById("page-loader").style.display = 'block';
             const response = await api.post('/api-v1/tasks', taskPayload);
 
             if (response.status === 201) {
                 console.log('Opportunity created successfully');
+                document.getElementById("page-loader").style.display = 'none';
                 onClose();
             } else {
+                document.getElementById("page-loader").style.display = 'none';
                 console.error('Failed to create Opportunity:', response.statusText);
             }
         } catch (error) {
+            document.getElementById("page-loader").style.display = 'none';
             console.error('Error creating Opportunity:', error);
         }
     }

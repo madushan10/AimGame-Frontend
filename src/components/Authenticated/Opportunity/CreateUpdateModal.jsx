@@ -158,13 +158,14 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
             console.log("opportunity Updated : ", updatedOpportunity)
 
             
-
+            document.getElementById("page-loader").style.display = 'block';
 
             const response = await api.post('/api-v1/opportunities', updatedOpportunity);
 
             if (response.status === 201) {
                 //setMessage('Opportunity created successfully');
                 setError(null);
+                document.getElementById("page-loader").style.display = 'none';
                 setSuccess(`Opportunity created successfully`);
                 
                 // console.log('Opportunity created successfully');
@@ -174,11 +175,13 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                 //setMessage('Failed to create opportunity');
                 //window.alert('Failed to create opportunity');
                 setSuccess(null);
+                document.getElementById("page-loader").style.display = 'none';
                 setError(`Failed to create opportunity`);
                 // console.error('Failed to create opportunity:', response.statusText);
             }
         } catch (error) {
             setSuccess(null);
+            document.getElementById("page-loader").style.display = 'none';
             setError(`Failed to create opportunity`);
             // console.error('Error creating opportunity:', error);
         }
@@ -215,20 +218,24 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
         };
 
         try {
+            document.getElementById("page-loader").style.display = 'block';
             const response = await api.put(`/api-v1/opportunities/${opportunity._id}`, updatedOpportunity);
 
             if (response.status === 200 || response.status === 201) {
                 setError(null);
+                document.getElementById("page-loader").style.display = 'none';
                 setSuccess(`Opportunity updated successfully`);
                 // console.log('Client updated successfully');
                 //onClose();
             } else {
                 setSuccess(null);
+                document.getElementById("page-loader").style.display = 'none';
                 setError(`Failed to update opportunity`);
                 // console.error('Failed to update client:', response.statusText);
             }
         } catch (error) {
             setSuccess(null);
+            document.getElementById("page-loader").style.display = 'none';
             setError(`Failed to update opportunity`);
             // console.error('Error updating client:', error);
         }

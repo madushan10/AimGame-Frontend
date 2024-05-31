@@ -63,16 +63,20 @@ export default function CreateUpdateModal({ show, onClose, data }) {
         setLoading(true);
         setError(null);
         try {
+            document.getElementById("page-loader").style.display = 'block';
             const response = await api.post('/api-v1/team-members', team);
             if (response.status === 201) {
                 console.log('Team Member created successfully');
+                document.getElementById("page-loader").style.display = 'none';
                 onClose();
             } else {
                 console.error('Failed to create Team Member:', response.statusText);
+                document.getElementById("page-loader").style.display = 'none';
                 setError(response.data.errors);
             }
         } catch (error) {
             console.error('Error creating client:', error);
+            document.getElementById("page-loader").style.display = 'none';
             setError(error.message);
         }
         setLoading(false);
@@ -102,17 +106,21 @@ export default function CreateUpdateModal({ show, onClose, data }) {
                 setSuccess(null);
             }
             else{
+                document.getElementById("page-loader").style.display = 'block';
                 const response = await api.put(`/api-v1/team-members/${team._id}`, team);
             if (response.status === 200 || response.status === 201) {
                 console.log('Team Member updated successfully');
                 setSuccess("Team Member updated successfully.");
+                document.getElementById("page-loader").style.display = 'none';
                 setError(null);
             } else {
+                document.getElementById("page-loader").style.display = 'none';
                 console.error('Failed to update Team Member:', response.statusText);
             }
             }
             
         } catch (error) {
+            document.getElementById("page-loader").style.display = 'none';
             console.error('Error updating Team Member:', error);
         }
     }

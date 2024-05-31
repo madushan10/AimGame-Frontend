@@ -12,15 +12,17 @@ export default function SearchModal({ show, onClose, list, updateTempData }) {
     const fetchSearchResults = async () => {
         if (searchValue.trim() !== '') {
           try {
+            document.getElementById("page-loader").style.display = 'block';
             const response = await api.get(`/api-v1/team-members/search/${searchValue}`);
             const data = response.data.data;
             setSearchResults(data);
             // Update the parent component's state with search results
             updateTempData(data);
-
+            document.getElementById("page-loader").style.display = 'none';
             onClose()
           } catch (error) {
             console.error('Error fetching search results:', error);
+            document.getElementById("page-loader").style.display = 'none';
           }
         }
       };

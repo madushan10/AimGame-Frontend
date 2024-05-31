@@ -42,16 +42,20 @@ export default function RoleMappingModal({ show, onClose, data, org, allworkspac
     const onSave = async () => {
         // console.log("mappedRole data : ",mappedRole)
         try {
+            document.getElementById("page-loader").style.display = 'block';
             const response = await api.post(`/api-v1/opportunities/${data._id}/mapping-role`, mappedRole);
 
             if (response.status === 201) {
                 console.log('Mapped Role successfully');
+                document.getElementById("page-loader").style.display = 'none';
                 onClose();
             } else {
                 console.error('Failed to mapped role:', response.statusText);
+                document.getElementById("page-loader").style.display = 'none';
             }
         } catch (error) {
             console.error('Error mapping role:', error);
+            document.getElementById("page-loader").style.display = 'none';
         }
     }
 

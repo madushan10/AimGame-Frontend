@@ -37,19 +37,22 @@ export default function CreateUpdateModal({ show, onClose, data, workspaces, all
                 window.alert('Please fill in all required fields.');
                 return;
             }
-
+            document.getElementById("page-loader").style.display = 'block';
             const response = await api.post('/api-v1/partners', partner);
 
             if (response.status === 201) {
                 console.log('Partner created successfully');
+                document.getElementById("page-loader").style.display = 'none';
                 window.alert('Partner created successfully');
                 onClose();
             } else {
                 console.error('Failed to create partner:', response.statusText);
+                document.getElementById("page-loader").style.display = 'none';
                 window.alert('Failed to create partner');
             }
         } catch (error) {
             console.error('Error creating partner:', error);
+            document.getElementById("page-loader").style.display = 'none';
             window.alert('Failed to create partner');
         }
     }
