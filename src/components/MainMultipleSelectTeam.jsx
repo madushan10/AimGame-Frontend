@@ -13,9 +13,9 @@ export default function MainMultipleSelectTeam({ options, label, placeholder, on
             option.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, ''))
         );
 
-        console.log("multiple select label : ", label)
-        console.log("multiple select value : ", value)
-        // console.log("multiple select onChange : ", onChange)
+    console.log("multiple select label : ", label)
+    console.log("multiple select value : ", value)
+    // console.log("multiple select onChange : ", onChange)
 
     const handleOnChange = (selectedItems) => {
         onChange(selectedItems);
@@ -49,8 +49,8 @@ export default function MainMultipleSelectTeam({ options, label, placeholder, on
 
                         <div className='flex flex-wrap gap-1 my-3'>
                             {value.map((option, index) => {
-    const selectedOption = options.find(opt => opt._id === option._id);
-    // console.log("chip : ", selectedOption);
+                                const selectedOption = options.find(opt => opt._id === option._id);
+                                // console.log("chip : ", selectedOption);
                                 const name = selectedOption ? selectedOption.name : "Unknown";
                                 return (
                                     <Chip

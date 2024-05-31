@@ -19,6 +19,7 @@ import MainDateInput from '../../MainDateInput'
 import MainRequiredInput from '../MainRequiredInput'
 import MainSelectLead from '../../MainSelectLead'
 import MainMultipleSelectTeam from '../../MainMultipleSelectTeam'
+import OpMapRoleMainMultipleSelect from '../../OpMapRoleMainMultipleSelect'
 
 const designations = [
     { id: 1, name: 'Head of Sales' },
@@ -60,10 +61,10 @@ const probability = [
 ]
 
 const opMappingRoles = [
-    { name: "Test1", designation: "CEO" },
-    { name: "Test2", designation: "Director" },
-    { name: "Test3", designation: "Manager" },
-    { name: "Test4", designation: "Team Member" },
+    { name: "Test1", designation: "CEO", role: "CEO" },
+    { name: "Test2", designation: "Director",role: "Director" },
+    { name: "Test3", designation: "Manager", role: "Manager" },
+    { name: "Test4", designation: "Team Member", role: "Team Member" },
 ]
 
 const lead = [
@@ -552,19 +553,19 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                         </div>
                         {data &&
                             <div>
-                                <MainMultipleSelect
-                                    key={JSON.stringify(opportunity.mappingRoles)}
+                                <OpMapRoleMainMultipleSelect
+                                    key={JSON.stringify(opportunity.opportunityMappingRoles)}
                                     disabled={loading}
-                                    value={opportunity.mappingRoles}
-                                    onChange={value => setOpportunity({ ...opportunity, mappingRoles: value })}
+                                    value={opportunity.opportunityMappingRoles}
+                                    onChange={value => setOpportunity({ ...opportunity, opportunityMappingRoles: value })}
                                     onDeleteItem={index => {
-                                        let tempData = [...opportunity.mappingRoles];
+                                        let tempData = [...opportunity.opportunityMappingRoles];
                                         tempData.splice(index, 1);
-                                        setOpportunity({ ...opportunity, mappingRoles: tempData });
+                                        setOpportunity({ ...opportunity, opportunityMappingRoles: tempData });
                                     }}
                                     label={"OP Mapping Roles"}
                                     placeholder={""}
-                                    options={opMappingRoles.map(member => ({ _id: member.name, name: `${member.name}, ${member.designation}` }))}
+                                    options={opportunity.opportunityMappingRoles}
                                 />
 
                                 {/* <MainMultipleSelect

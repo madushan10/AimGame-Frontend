@@ -4,14 +4,18 @@ import { Combobox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { Chip } from '@mui/material'
 
-export default function MainMultipleSelect({ options, label, placeholder, onDeleteItem, value = [], onChange, disabled }) {
+export default function OpMapRoleMainMultipleSelect({ options, label, placeholder, onDeleteItem, value = [], onChange, disabled }) {
     const [query, setQuery] = useState('');
 
     const filteredOptions = query === ''
         ? options
         : options.filter((option) =>
-            option.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, ''))
+            option.role.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, ''))
         );
+
+    console.log("multiple select label Mapping Role : ", label)
+    console.log("multiple select value Mapping Role : ", value)
+    // console.log("multiple select onChange : ", onChange)
 
     const handleOnChange = (selectedItems) => {
         onChange(selectedItems);
@@ -31,7 +35,7 @@ export default function MainMultipleSelect({ options, label, placeholder, onDele
                         <Combobox.Input
                             placeholder={placeholder}
                             className="w-full border-none min-h-[48px] outline-none pl-3 pr-10 text-sm lg:text-base leading-5 text-gray-900 bg-transparent"
-                            displayValue={(option) => option.name}
+                            displayValue={(option) => option.role}
                             onChange={(event) => setQuery(event.target.value)}
                         />
                         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -44,14 +48,11 @@ export default function MainMultipleSelect({ options, label, placeholder, onDele
                     {value.length > 0 && (
 
                         <div className='flex flex-wrap gap-1 my-3'>
-                            {value.map((optionId, index) => {
-                                const selectedOption = options.find(option => option._id === optionId);
-                                // console.log("chip : ", selectedOption);
-
+                            {value.map((option, index) => {
                                 return (
                                     <Chip
-                                        key={optionId}
-                                        label={selectedOption ? selectedOption.name : 'Unknown'}
+                                        key={option._id}
+                                        label={option.role}
                                         onDelete={() => onDeleteItem(index)}
                                     />
                                 );
@@ -74,7 +75,7 @@ export default function MainMultipleSelect({ options, label, placeholder, onDele
                                 filteredOptions.map((option) => (
                                     <Combobox.Option
                                         key={option._id}
-                                        value={option._id}
+                                        value={option}
                                         className={({ active }) =>
                                             `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-app-blue text-white' : 'text-gray-900'
                                             }`
@@ -86,7 +87,7 @@ export default function MainMultipleSelect({ options, label, placeholder, onDele
                                                     className={`block truncate ${selected ? 'font-medium' : 'font-normal'
                                                         }`}
                                                 >
-                                                    {option.name}
+                                                    {`${option.name} , ${option.role} , ${option.designation}`}
                                                 </span>
                                                 {selected ? (
                                                     <span
