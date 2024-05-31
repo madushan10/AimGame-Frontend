@@ -17,6 +17,8 @@ export default function SearchModal({ show, onClose, list, updateAllClients }) {
             setSearchResults(data);
             // Update the parent component's state with search results
             updateAllClients(data);
+
+            onClose()
           } catch (error) {
             console.error('Error fetching search results:', error);
           }

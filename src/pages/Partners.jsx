@@ -92,7 +92,23 @@ export default function Partners({ title }) {
 
     return (
         <AuthenticatedLayout>
-            <div className='flex flex-col-reverse lg:flex-row  lg:items-center justify-end gap-3'  >
+            <div className='flex flex-col-reverse lg:flex-row  lg:items-center justify-between gap-3'  >
+                
+            <div className='flex lg:items-center gap-3' >
+                    {/* <input
+                        type="search"
+                        placeholder='Search'
+                        onChange={(e) => setSearchValue(e.target.value)}
+                    />
+
+                    <button
+                        onClick={fetchSearchResults}
+                        className='flex justify-center items-center text-white bg-app-gray-5 px-5 py-2 w-full lg:w-fit rounded-lg'
+                    >
+                        Search
+                    </button> */}
+                    <a href={'/partners'} className='flex justify-center items-center text-white bg-app-gray-5 px-5 py-2 w-full lg:w-fit rounded-lg' style={{cursor: 'pointer'}} >See All</a>
+                </div>
                 <button onClick={() => {
                     setShow(true)
                     setSelectedData(null)

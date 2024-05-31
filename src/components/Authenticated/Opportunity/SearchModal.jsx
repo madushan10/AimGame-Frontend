@@ -1,13 +1,19 @@
+/* eslint-disable react/prop-types */
 import React, {useState } from 'react'
 import { Transition } from '@headlessui/react'
 import { XCircleIcon } from '@heroicons/react/24/outline'
 // import MainInput from '../../MainInput'
 import api from '../../../services/api'
+import { useNavigate } from 'react-router-dom';
 
 export default function SearchModal({ show, onClose, list, updateTempData }) {
 
     const [searchValue, setSearchValue] = useState([]);
     const [searchResults, setSearchResults] = useState([]);
+    const navigate = useNavigate();
+
+
+
     // search
     const fetchSearchResults = async () => {
         if (searchValue.trim() !== '') {
@@ -17,6 +23,9 @@ export default function SearchModal({ show, onClose, list, updateTempData }) {
             setSearchResults(data);
             // Update the parent component's state with search results
             updateTempData(data);
+
+            onClose()
+
           } catch (error) {
             console.error('Error fetching search results:', error);
           }
