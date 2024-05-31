@@ -568,21 +568,6 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                                     options={opportunity.opportunityMappingRoles}
                                 />
 
-                                {/* <MainMultipleSelect
-                                    key={JSON.stringify(opportunity.mappingRoles)}
-                                    disabled={loading}
-                                    value={opportunity.mappingRoles}
-                                    onChange={value => setOpportunity({ ...opportunity, mappingRoles: value })}
-                                    onDeleteItem={index => {
-                                        let tempData = [...opportunity.mappingRoles];
-                                        tempData.splice(index, 1);
-                                        setOpportunity({ ...opportunity, mappingRoles: tempData });
-                                    }}
-                                    label={"OP Mapping Roles"}
-                                    placeholder={""}
-                                    options={opportunityMappingRoles.map(member => ({ _id: member.name, name: `${member.name}, ${member.designation}` }))}
-                                /> */}
-
                                 <div className='mt-2 flex justify-end' >
                                     <button
                                         onClick={onOpMappingAddClick}
@@ -596,6 +581,8 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                                 </div>
                             </div>
                         }
+
+                        
                         {data &&
                             <div>
                                 {/* <MainMultipleSelectTasks

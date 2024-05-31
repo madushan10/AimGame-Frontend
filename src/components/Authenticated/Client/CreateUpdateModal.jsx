@@ -77,7 +77,7 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
             // }
 
             const headers = { 'Content-Type': 'multipart/form-data' };
-            const response = await api.post('/api-v1/clients', formData, {headers} );
+            const response = await api.post('/api-v1/clients', formData, { headers });
             console.log(response);
             if (response.status === 201) {
                 console.log('Client created successfully');
@@ -115,10 +115,15 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
 
 
     const selectedWorkspace = allworkspaces?.find(workspace => workspace._id === client?.workspaceId);
-    console.log("Selected Lead:", selectedWorkspace);
-    
+    console.log("Selected WOrkspace:", selectedWorkspace);
+
     const selectedIndustryType = industryTypes?.find(industry => industry._id === client?.industryTypeId);
-    console.log("Selected Industry:", industryTypes);
+    console.log("Selected Industry:", selectedIndustryType);
+
+    // const clientIndustryTypeId = client?.industryTypeId?._id;
+    // const selectedIndustryType = industryTypes?.find(industry => industry._id === clientIndustryTypeId);
+    // console.log("Selected Industry:", selectedIndustryType);
+
 
     // console.log("industryTypes : ", industryTypes)
 
