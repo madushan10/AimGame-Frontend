@@ -57,6 +57,7 @@ export default function Teams({ title }) {
                     />
                     <MagnifyingGlassIcon className='text-[#A6A9B9] w-5 h-5 absolute right-5' /> */}
                      <button onClick={() => setShowSearch(true)} className='flex justify-center items-center text-white bg-app-gray-5 px-5 py-2 w-full lg:w-fit rounded-lg' >Search</button>
+                     <a href={'/teams'} className='flex justify-center items-center text-white bg-app-gray-5 px-5 py-2 w-full lg:w-fit rounded-lg' style={{cursor: 'pointer'}} >See All</a>
                 </div>
  
                 <button onClick={() => {

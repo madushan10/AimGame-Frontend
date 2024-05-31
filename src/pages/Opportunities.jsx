@@ -225,6 +225,7 @@ export default function Opportunities({ title }) {
                         />
                     </button> */}
                     <button onClick={() => setShowSearch(true)} className='flex justify-center items-center text-white bg-app-gray-5 px-5 py-2 w-full lg:w-fit rounded-lg' >Search</button>
+                    <a href={'/opportunities'} className='flex justify-center items-center text-white bg-app-gray-5 px-5 py-2 w-full lg:w-fit rounded-lg' style={{cursor: 'pointer'}} >See All</a>
                 </div>
                 <button onClick={() => {
                     setShow(true)
