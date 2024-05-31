@@ -72,7 +72,7 @@ export default function MainSelect({ options, label, placeholder, value, onChang
                                                 `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-app-blue text-white' : 'text-gray-900'
                                                 }`
                                             }
-                                            value={option.name}
+                                            value={option}
                                         >
                                             {({ selected, active }) => (
                                                 <>
