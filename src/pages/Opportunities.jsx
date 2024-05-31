@@ -142,6 +142,7 @@ export default function Opportunities({ title }) {
         try {
             const response = await api.get('/api-v1/users');
             const data = response.data.data;
+            console.log("op lead data : ", data)
             setOpLead(data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -153,6 +154,7 @@ export default function Opportunities({ title }) {
             const response = await api.get('/api-v1/workspaces');
             const data = response.data.data;
             setAllWorkspaces(data);
+            console.log("op workspace data : ", data)
         } catch (error) {
             console.error('Error fetching data:', error);
         }

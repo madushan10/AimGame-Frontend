@@ -17,6 +17,9 @@ import MainSelectRate from '../../MainSelectRate'
 import MainMultipleSelectTasks from '../../MainMultipleSelectTasks'
 import MainDateInput from '../../MainDateInput'
 import MainRequiredInput from '../MainRequiredInput'
+import MainSelectLead from '../../MainSelectLead'
+import MainMultipleSelectTeam from '../../MainMultipleSelectTeam'
+import OpMapRoleMainMultipleSelect from '../../OpMapRoleMainMultipleSelect'
 
 const designations = [
     { id: 1, name: 'Head of Sales' },
@@ -58,10 +61,10 @@ const probability = [
 ]
 
 const opMappingRoles = [
-    { name: "Test1", designation: "CEO" },
-    { name: "Test2", designation: "Director" },
-    { name: "Test3", designation: "Manager" },
-    { name: "Test4", designation: "Team Member" },
+    { name: "Test1", designation: "CEO", role: "CEO" },
+    { name: "Test2", designation: "Director",role: "Director" },
+    { name: "Test3", designation: "Manager", role: "Manager" },
+    { name: "Test4", designation: "Team Member", role: "Team Member" },
 ]
 
 const lead = [
@@ -87,9 +90,9 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
     // const [opportunity, setOpportunity] = useState(initialState)
     const [opportunity, setOpportunity] = useState({
         name: '',
-    referenceNumber: '',
-    leadId: '',
-})
+        referenceNumber: '',
+        leadId: '',
+    })
     const [loading, setLoading] = useState(false)
     const [mappingRoles, setMappingRoles] = useState([]);
     const [message, setMessage] = useState('');
@@ -157,7 +160,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
             };
             console.log("opportunity Updated : ", updatedOpportunity)
 
-            
+
             document.getElementById("page-loader").style.display = 'block';
 
             const response = await api.post('/api-v1/opportunities', updatedOpportunity);
@@ -167,7 +170,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                 setError(null);
                 document.getElementById("page-loader").style.display = 'none';
                 setSuccess(`Opportunity created successfully`);
-                
+
                 // console.log('Opportunity created successfully');
                 //window.alert('Opportunity created successfully');
                 //onClose();
@@ -280,6 +283,30 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
 
     // console.log("data : ", data || '')
 
+
+
+    // let leadValue = {};
+    // if(selectedLead === null){
+    //     console.log("Selected Lead:", selectedLead)
+    // }else{
+    //     leadValue = selectedLead;
+    // }
+
+    const selectedLead = leadData?.find(lead => lead._id === opportunity?.leadId);
+    // console.log("Selected Lead:", selectedLead);
+
+    const selectedWorkspace = allworkspaces?.find(workspace => workspace._id === opportunity?.workspaceId);
+    // console.log("Selected Lead:", selectedWorkspace);
+    // allworkspaces?.find(row => row?.name === opportunity?.workspaceId?.name)
+
+    const teamMemberIds = Array.isArray(opportunity.team) ? opportunity.team.map(member => member._id) : [];
+    console.log("teamMemberIds : ", teamMemberIds)
+
+
+    console.log("partners : ", partners)
+    console.log("teamMembers : ", teamMembers)
+    console.log("opportunity : ", opportunity)
+
     return (
         <Transition
             show={show}
@@ -316,9 +343,25 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                             label={"Reference Number"}
                             placeholder={"Enter Reference Number"}
                         />
-                        <MainSelect
+                        {/* <MainSelect
                             disabled={loading}
                             value={leadData?.find(row => row?.name === opportunity?.leadId?.name)}
+                            onChange={value => setOpportunity({
+                                ...opportunity,
+                                leadId: value?._id || ''
+                            })}
+                            label={"Opportunity Lead"}
+                            placeholder={"Please Select Opportunity Lead"}
+                            options={leadData ?? []}
+                        /> */}
+                        <MainSelectLead
+                            disabled={loading}
+                            // value={
+                            //     opportunity.leadId
+                            //         ? leadData.find(lead => lead._id === opportunity.leadId)?.name || ''
+                            //         : ''
+                            // }
+                            value={selectedLead}
                             onChange={value => setOpportunity({
                                 ...opportunity,
                                 leadId: value?._id || ''
@@ -347,16 +390,16 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                             label={"Opportunity Lead"}
                             placeholder={"Please Select Opportunity Lead"}
                             options={leadData ?? []}
-                        />
-                        <MainInput
+                        /> */}
+                        {/* <MainInput
                             disabled={true}
                             value={
                                 opportunity.leadId
-                                    ? leadData.find(lead => lead._id === opportunity.leadId)?.designation || ''
+                                    ? leadData.find(lead => lead._id === opportunity.leadId)?.name || ''
                                     : ''
                             }
-                            label={"Designation"}
-                            placeholder={"Please Select Designation"}
+                            label={"Opportunity Lead"}
+                            placeholder={"Please Select Opportunity Lead"}
                         /> */}
                         {/* <MainSelect
                             disabled={loading}
@@ -459,9 +502,10 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                                 </button>
                             </div>
                         </div>
-                        <MainSelect
+                        <MainSelectLead
                             disabled={loading}
-                            value={allworkspaces?.find(row => row?.name === opportunity?.workspaceId?.name)}
+                            // value={allworkspaces?.find(row => row?.name === opportunity?.workspaceId?.name)}
+                            value={selectedWorkspace}
                             onChange={value => setOpportunity({
                                 ...opportunity,
                                 workspaceId: value?._id || ''
@@ -470,7 +514,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                             placeholder={"Please Select Workspace"}
                             options={allworkspaces ?? []}
                         />
-                        <MainMultipleSelect
+                        <MainMultipleSelectTeam
                             key={JSON.stringify(opportunity.team)}
                             disabled={loading}
                             value={opportunity.team}
@@ -482,7 +526,8 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                             }}
                             label={"Team Members"}
                             placeholder={""}
-                            options={teamMembers.map(member => ({ _id: member._id, name: member.name }))}
+                            // options={teamMembers.map(member => ({ _id: member._id, name: member.name }))}
+                            options={teamMembers}
                         />
                         <div>
 
@@ -515,35 +560,20 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                         </div>
                         {data &&
                             <div>
-                                <MainMultipleSelect
-                                    key={JSON.stringify(opportunity.mappingRoles)}
+                                <OpMapRoleMainMultipleSelect
+                                    key={JSON.stringify(opportunity.opportunityMappingRoles)}
                                     disabled={loading}
-                                    value={opportunity.mappingRoles}
-                                    onChange={value => setOpportunity({ ...opportunity, mappingRoles: value })}
+                                    value={opportunity.opportunityMappingRoles}
+                                    onChange={value => setOpportunity({ ...opportunity, opportunityMappingRoles: value })}
                                     onDeleteItem={index => {
-                                        let tempData = [...opportunity.mappingRoles];
+                                        let tempData = [...opportunity.opportunityMappingRoles];
                                         tempData.splice(index, 1);
-                                        setOpportunity({ ...opportunity, mappingRoles: tempData });
+                                        setOpportunity({ ...opportunity, opportunityMappingRoles: tempData });
                                     }}
                                     label={"OP Mapping Roles"}
                                     placeholder={""}
-                                    options={opMappingRoles.map(member => ({ _id: member.name, name: `${member.name}, ${member.designation}` }))}
+                                    options={opportunity.opportunityMappingRoles}
                                 />
-
-                                {/* <MainMultipleSelect
-                                    key={JSON.stringify(opportunity.mappingRoles)}
-                                    disabled={loading}
-                                    value={opportunity.mappingRoles}
-                                    onChange={value => setOpportunity({ ...opportunity, mappingRoles: value })}
-                                    onDeleteItem={index => {
-                                        let tempData = [...opportunity.mappingRoles];
-                                        tempData.splice(index, 1);
-                                        setOpportunity({ ...opportunity, mappingRoles: tempData });
-                                    }}
-                                    label={"OP Mapping Roles"}
-                                    placeholder={""}
-                                    options={opportunityMappingRoles.map(member => ({ _id: member.name, name: `${member.name}, ${member.designation}` }))}
-                                /> */}
 
                                 <div className='mt-2 flex justify-end' >
                                     <button
@@ -558,6 +588,8 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                                 </div>
                             </div>
                         }
+
+                        
                         {data &&
                             <div>
                                 {/* <MainMultipleSelectTasks
@@ -597,8 +629,8 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                         }
                     </div>
                     <div className='px-10 ' >
-                    {error && <p className="text-red-500 mt-2 mb-2">{error}</p>}
-                    {success && <p className="text-green-500 mt-2 mb-2">{success}</p>}
+                        {error && <p className="text-red-500 mt-2 mb-2">{error}</p>}
+                        {success && <p className="text-green-500 mt-2 mb-2">{success}</p>}
                     </div>
                     <div className='flex justify-center items-center gap-5 mb-5' >
                         {/* {message && (

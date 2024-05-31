@@ -13,6 +13,10 @@ export default function MainMultipleSelect({ options, label, placeholder, onDele
             option.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, ''))
         );
 
+        console.log("multiple select label : ", label)
+        console.log("multiple select value : ", value)
+        // console.log("multiple select onChange : ", onChange)
+
     const handleOnChange = (selectedItems) => {
         onChange(selectedItems);
     };

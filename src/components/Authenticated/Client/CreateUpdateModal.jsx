@@ -8,6 +8,7 @@ import MainSelect from '../../MainSelect'
 import MainMultipleSelect from '../../MainMultipleSelect'
 import MainImageInput from '../../MainImageInput'
 import api from '../../../services/api'
+import MainSelectLead from '../../MainSelectLead'
 
 
 const initialState = {
@@ -15,7 +16,7 @@ const initialState = {
     photo: null
 }
 
-export default function CreateUpdateModal({ show, onClose, data, industryTypes, workspaces, allworkspaces }) {
+export default function CreateUpdateModal({ show, onClose, data, industryTypes, workspaces, allworkspaces, clients }) {
 
     const [client, setClient] = useState(initialState)
     const [loading, setLoading] = useState(false)
@@ -29,7 +30,7 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
             setClient(initialState)
         }
     }, [data])
-    // console.log("client : ", client)
+    console.log("client data : ", clients)
 
 
 
@@ -77,7 +78,7 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
 
             const headers = { 'Content-Type': 'multipart/form-data' };
             document.getElementById("page-loader").style.display = 'block';
-            const response = await api.post('/api-v1/clients', formData, {headers} );
+            const response = await api.post('/api-v1/clients', formData, { headers });
             console.log(response);
             if (response.status === 201) {
                 console.log('Client created successfully');
@@ -118,6 +119,18 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
     }
 
 
+    const selectedWorkspace = allworkspaces?.find(workspace => workspace._id === client?.workspaceId);
+    console.log("Selected WOrkspace:", selectedWorkspace);
+
+    const selectedIndustryType = industryTypes?.find(industry => industry._id === client?.industryTypeId);
+    console.log("Selected Industry:", selectedIndustryType);
+
+    // const clientIndustryTypeId = client?.industryTypeId?._id;
+    // const selectedIndustryType = industryTypes?.find(industry => industry._id === clientIndustryTypeId);
+    // console.log("Selected Industry:", selectedIndustryType);
+
+
+    // console.log("industryTypes : ", industryTypes)
 
     return (
         <Transition
@@ -162,9 +175,20 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
                             label={"Reference No"}
                             placeholder={"Enter Reference No"}
                         />
-                        <MainSelect
+                        {/* <MainSelect
                             disabled={loading}
                             value={industryTypes?.find(row => row?.name === client?.industryType)}
+                            onChange={value => setClient({
+                                ...client,
+                                industryTypeId: value?._id || ''
+                            })}
+                            label={"Industry Type"}
+                            placeholder={"Please Select Industry Type"}
+                            options={industryTypes}
+                        /> */}
+                        <MainSelectLead
+                            disabled={loading}
+                            value={selectedIndustryType}
                             onChange={value => setClient({
                                 ...client,
                                 industryTypeId: value?._id || ''
@@ -198,9 +222,10 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
                             label={"workspaceId"}
                             placeholder={"workspaceId"}
                         /> */}
-                        <MainSelect
+                        <MainSelectLead
                             disabled={loading}
-                            value={allworkspaces?.find(row => row?.name === client?.workspaceId)}
+                            // value={allworkspaces?.find(row => row?.name === client?.workspaceId)}
+                            value={selectedWorkspace}
                             onChange={value => setClient({
                                 ...client,
                                 workspaceId: value?._id || ''

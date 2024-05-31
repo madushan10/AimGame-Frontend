@@ -82,7 +82,6 @@ export default function RoleMappingModal({ show, onClose, data, org, allworkspac
             <div className='max-h-[80vh] h-[80vh] lg:h-fit overflow-y-auto no-scrollbar' >
                 <div className='grid gap-5 grid-cols-1 lg:grid-cols-2 px-10 pt-10' >
                     <MainInput
-                        disabled={loading}
                         value={mappedRole?.name}
                         onChange={text => setMappedRole({ ...mappedRole, name: text })}
                         label={"Name"}
@@ -116,7 +115,7 @@ export default function RoleMappingModal({ show, onClose, data, org, allworkspac
                 </div>
                 <div className='grid gap-5 grid-cols-1 lg:grid-cols-2 px-10 lg:px-20 pt-10' >
                     <MainInput
-                        disabled={loading}s
+                        disabled={loading}
                         value={mappedRole?.impact}
                         onChange={text => setMappedRole({ ...mappedRole, impact: text })}
                         label={"Rate - How Impact do you feel?"}

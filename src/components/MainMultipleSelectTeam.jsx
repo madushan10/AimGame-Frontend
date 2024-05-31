@@ -4,17 +4,17 @@ import { Combobox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { Chip } from '@mui/material'
 
-export default function OpMapRoleMainMultipleSelect({ options, label, placeholder, onDeleteItem, value = [], onChange, disabled }) {
+export default function MainMultipleSelectTeam({ options, label, placeholder, onDeleteItem, value = [], onChange, disabled }) {
     const [query, setQuery] = useState('');
 
     const filteredOptions = query === ''
         ? options
         : options.filter((option) =>
-            option.role.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, ''))
+            option.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, ''))
         );
 
-    console.log("multiple select label Mapping Role : ", label)
-    console.log("multiple select value Mapping Role : ", value)
+    console.log("multiple select label : ", label)
+    console.log("multiple select value : ", value)
     // console.log("multiple select onChange : ", onChange)
 
     const handleOnChange = (selectedItems) => {
@@ -35,7 +35,7 @@ export default function OpMapRoleMainMultipleSelect({ options, label, placeholde
                         <Combobox.Input
                             placeholder={placeholder}
                             className="w-full border-none min-h-[48px] outline-none pl-3 pr-10 text-sm lg:text-base leading-5 text-gray-900 bg-transparent"
-                            displayValue={(option) => option.role}
+                            displayValue={(option) => option.name}
                             onChange={(event) => setQuery(event.target.value)}
                         />
                         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -49,10 +49,13 @@ export default function OpMapRoleMainMultipleSelect({ options, label, placeholde
 
                         <div className='flex flex-wrap gap-1 my-3'>
                             {value.map((option, index) => {
+                                const selectedOption = options.find(opt => opt._id === option._id);
+                                // console.log("chip : ", selectedOption);
+                                const name = selectedOption ? selectedOption.name : "Unknown";
                                 return (
                                     <Chip
                                         key={option._id}
-                                        label={option.role}
+                                        label={name}
                                         onDelete={() => onDeleteItem(index)}
                                     />
                                 );
@@ -87,7 +90,7 @@ export default function OpMapRoleMainMultipleSelect({ options, label, placeholde
                                                     className={`block truncate ${selected ? 'font-medium' : 'font-normal'
                                                         }`}
                                                 >
-                                                    {`${option.name} , ${option.role} , ${option.designation}`}
+                                                    {option.name}
                                                 </span>
                                                 {selected ? (
                                                     <span
