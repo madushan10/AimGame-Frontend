@@ -17,6 +17,7 @@ import MainSelectRate from '../../MainSelectRate'
 import MainMultipleSelectTasks from '../../MainMultipleSelectTasks'
 import MainDateInput from '../../MainDateInput'
 import MainRequiredInput from '../MainRequiredInput'
+import MainSelectLead from '../../MainSelectLead'
 
 const designations = [
     { id: 1, name: 'Head of Sales' },
@@ -87,9 +88,9 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
     // const [opportunity, setOpportunity] = useState(initialState)
     const [opportunity, setOpportunity] = useState({
         name: '',
-    referenceNumber: '',
-    leadId: '',
-})
+        referenceNumber: '',
+        leadId: '',
+    })
     const [loading, setLoading] = useState(false)
     const [mappingRoles, setMappingRoles] = useState([]);
     const [message, setMessage] = useState('');
@@ -157,7 +158,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
             };
             console.log("opportunity Updated : ", updatedOpportunity)
 
-            
+
 
 
             const response = await api.post('/api-v1/opportunities', updatedOpportunity);
@@ -166,7 +167,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                 //setMessage('Opportunity created successfully');
                 setError(null);
                 setSuccess(`Opportunity created successfully`);
-                
+
                 // console.log('Opportunity created successfully');
                 //window.alert('Opportunity created successfully');
                 //onClose();
@@ -273,6 +274,18 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
 
     // console.log("data : ", data || '')
 
+
+
+    // let leadValue = {};
+    // if(selectedLead === null){
+    //     console.log("Selected Lead:", selectedLead)
+    // }else{
+    //     leadValue = selectedLead;
+    // }
+
+    const selectedLead = leadData?.find(lead => lead._id === opportunity?.leadId);
+    console.log("Selected Lead:", selectedLead);
+
     return (
         <Transition
             show={show}
@@ -309,9 +322,25 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                             label={"Reference Number"}
                             placeholder={"Enter Reference Number"}
                         />
-                        <MainSelect
+                        {/* <MainSelect
                             disabled={loading}
                             value={leadData?.find(row => row?.name === opportunity?.leadId?.name)}
+                            onChange={value => setOpportunity({
+                                ...opportunity,
+                                leadId: value?._id || ''
+                            })}
+                            label={"Opportunity Lead"}
+                            placeholder={"Please Select Opportunity Lead"}
+                            options={leadData ?? []}
+                        /> */}
+                        <MainSelectLead
+                            disabled={loading}
+                            // value={
+                            //     opportunity.leadId
+                            //         ? leadData.find(lead => lead._id === opportunity.leadId)?.name || ''
+                            //         : ''
+                            // }
+                            value={selectedLead}
                             onChange={value => setOpportunity({
                                 ...opportunity,
                                 leadId: value?._id || ''
@@ -330,7 +359,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                         />
 
 
-                        {/* <MainSelect
+                         {/* <MainSelect
                             disabled={loading}
                             value={opportunity.leadId}
                             onChange={value => setOpportunity({
@@ -340,16 +369,16 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                             label={"Opportunity Lead"}
                             placeholder={"Please Select Opportunity Lead"}
                             options={leadData ?? []}
-                        />
-                        <MainInput
+                        /> */}
+                       {/* <MainInput
                             disabled={true}
                             value={
                                 opportunity.leadId
-                                    ? leadData.find(lead => lead._id === opportunity.leadId)?.designation || ''
+                                    ? leadData.find(lead => lead._id === opportunity.leadId)?.name || ''
                                     : ''
                             }
-                            label={"Designation"}
-                            placeholder={"Please Select Designation"}
+                            label={"Opportunity Lead"}
+                            placeholder={"Please Select Opportunity Lead"}
                         /> */}
                         {/* <MainSelect
                             disabled={loading}
@@ -590,8 +619,8 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                         }
                     </div>
                     <div className='px-10 ' >
-                    {error && <p className="text-red-500 mt-2 mb-2">{error}</p>}
-                    {success && <p className="text-green-500 mt-2 mb-2">{success}</p>}
+                        {error && <p className="text-red-500 mt-2 mb-2">{error}</p>}
+                        {success && <p className="text-green-500 mt-2 mb-2">{success}</p>}
                     </div>
                     <div className='flex justify-center items-center gap-5 mb-5' >
                         {/* {message && (

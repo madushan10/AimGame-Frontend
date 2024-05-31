@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
-export default function MainSelect({ options, label, placeholder, value, onChange, disabled, variant }) {
+export default function MainSelectLead({ options, label, placeholder, value, onChange, disabled, variant }) {
     const [query, setQuery] = useState('')
 
     const filteredOptions =
@@ -16,9 +16,10 @@ export default function MainSelect({ options, label, placeholder, value, onChang
                     .includes(query.toLowerCase().replace(/\s+/g, ''))
             )
 
-            // console.log("OP Data On Main Select label: ", label);
+ console.log("OP Data On Main Select label: ", label);
             // console.log("OP Data On Main Select all options: ", filteredOptions);
-            // console.log("OP Data On Main Selected value: ", value);
+            console.log("OP Data On Main Selected value: ", value);
+
 
     const getHeight = () => {
         if(variant == "small"){
@@ -72,7 +73,7 @@ export default function MainSelect({ options, label, placeholder, value, onChang
                                                 `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-app-blue text-white' : 'text-gray-900'
                                                 }`
                                             }
-                                            value={option.name}
+                                            value={option}
                                         >
                                             {({ selected, active }) => (
                                                 <>
