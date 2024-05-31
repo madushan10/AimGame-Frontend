@@ -8,6 +8,7 @@ import MainSelect from '../../MainSelect'
 import MainMultipleSelect from '../../MainMultipleSelect'
 import MainImageInput from '../../MainImageInput'
 import api from '../../../services/api'
+import MainSelectLead from '../../MainSelectLead'
 
 
 const initialState = {
@@ -113,6 +114,13 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
     }
 
 
+    const selectedWorkspace = allworkspaces?.find(workspace => workspace._id === client?.workspaceId);
+    console.log("Selected Lead:", selectedWorkspace);
+    
+    const selectedIndustryType = industryTypes?.find(industry => industry._id === client?.industryTypeId._id);
+    console.log("Selected Industry:", selectedIndustryType);
+
+    // console.log("industryTypes : ", industryTypes)
 
     return (
         <Transition
@@ -157,9 +165,20 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
                             label={"Reference No"}
                             placeholder={"Enter Reference No"}
                         />
-                        <MainSelect
+                        {/* <MainSelect
                             disabled={loading}
                             value={industryTypes?.find(row => row?.name === client?.industryType)}
+                            onChange={value => setClient({
+                                ...client,
+                                industryTypeId: value?._id || ''
+                            })}
+                            label={"Industry Type"}
+                            placeholder={"Please Select Industry Type"}
+                            options={industryTypes}
+                        /> */}
+                        <MainSelectLead
+                            disabled={loading}
+                            value={selectedIndustryType}
                             onChange={value => setClient({
                                 ...client,
                                 industryTypeId: value?._id || ''
@@ -193,9 +212,10 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
                             label={"workspaceId"}
                             placeholder={"workspaceId"}
                         /> */}
-                        <MainSelect
+                        <MainSelectLead
                             disabled={loading}
-                            value={allworkspaces?.find(row => row?.name === client?.workspaceId)}
+                            // value={allworkspaces?.find(row => row?.name === client?.workspaceId)}
+                            value={selectedWorkspace}
                             onChange={value => setClient({
                                 ...client,
                                 workspaceId: value?._id || ''

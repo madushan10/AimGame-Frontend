@@ -363,7 +363,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                         />
 
 
-                         {/* <MainSelect
+                        {/* <MainSelect
                             disabled={loading}
                             value={opportunity.leadId}
                             onChange={value => setOpportunity({
@@ -374,7 +374,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                             placeholder={"Please Select Opportunity Lead"}
                             options={leadData ?? []}
                         /> */}
-                       {/* <MainInput
+                        {/* <MainInput
                             disabled={true}
                             value={
                                 opportunity.leadId
@@ -488,7 +488,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                         <MainSelectLead
                             disabled={loading}
                             // value={allworkspaces?.find(row => row?.name === opportunity?.workspaceId?.name)}
-value={selectedWorkspace}
+                            value={selectedWorkspace}
                             onChange={value => setOpportunity({
                                 ...opportunity,
                                 workspaceId: value?._id || ''
