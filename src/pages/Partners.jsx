@@ -118,7 +118,7 @@ export default function Partners({ title }) {
                 </button>
             </div>
             <div className='' >
-                <div className='flex flex-col lg:flex-row lg:justify-end my-3' >
+                {/* <div className='flex flex-col lg:flex-row lg:justify-end my-3' >
                     <MainSelect
                         variant="small"
                         placeholder={"Select Workspace"}
@@ -128,15 +128,24 @@ export default function Partners({ title }) {
                             handleWorkspaceChange(selectedOption._id);
                         }}
                     />
-                </div>
+                </div> */}
                 <div className='flex flex-col lg:flex-row gap-3 lg:gap-5' >
-                    <MainSelect
+                    {/* <MainSelect
                         variant="small"
                         placeholder={"Select Account"}
                         options={[
                             { id: 1, name: 'Account 1' },
                             { id: 2, name: 'Account 2' },
                         ]}
+                    /> */}
+                    <MainSelect
+                        variant="small"
+                        placeholder={"Select Workspace"}
+                        options={workspaces}
+                        onChange={(selectedOption) => {
+                            setSelectedWorkspace(selectedOption._id);
+                            handleWorkspaceChange(selectedOption._id);
+                        }}
                     />
                     <MainSelect
                         variant="small"
@@ -151,6 +160,10 @@ export default function Partners({ title }) {
                             { id: 2, name: 'Company 2' },
                         ]}
                     />
+                    <button onClick={() => {
+                }} className='flex items-center gap-3 justify-center bg-app-blue-2 rounded-lg w-full lg:w-fit px-6 py-2 text-white' >
+                    <div>Filter</div>
+                </button>
                 </div>
             </div>
             <div className='bg-white rounded-lg mt-10' >
