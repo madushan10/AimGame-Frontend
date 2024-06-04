@@ -24,9 +24,9 @@ export default function Partners({ title }) {
     const [companies, setCompanies] = useState([]);
     const [selectedWorkspace, setSelectedWorkspace] = useState(null);
 
+    // client: null,
     const [filterValues, setFilterValues] = useState({
         workspace: null,
-        client: null,
         company: null,
     });
 
@@ -122,12 +122,12 @@ export default function Partners({ title }) {
         }));
     };
 
-    const handleClientChange = (clientId) => {
-        setFilterValues((prevValues) => ({
-            ...prevValues,
-            client: clientId,
-        }));
-    };
+    // const handleClientChange = (clientId) => {
+    //     setFilterValues((prevValues) => ({
+    //         ...prevValues,
+    //         client: clientId,
+    //     }));
+    // };
 
     const handleCompanyChange = (companyId) => {
         setFilterValues((prevValues) => ({
@@ -141,6 +141,7 @@ export default function Partners({ title }) {
         try {
             const response = await api.post(`/api-v1/partners/filter/partners/get`, filterValues);
             console.log('Response:', response.data);
+            setTempData(response.data.data);
         } catch (error) {
             console.error('Error:', error);
         }
@@ -203,7 +204,7 @@ export default function Partners({ title }) {
                             handleAllWorkspaceChange(selectedOption._id);
                         }}
                     />
-                    <MainSelect
+                    {/* <MainSelect
                         variant="small"
                         placeholder={"Select Client"}
                         options={clients}
@@ -211,7 +212,7 @@ export default function Partners({ title }) {
                             console.log(selectedOption.name);
                             handleClientChange(selectedOption.name);
                         }}
-                    />
+                    /> */}
                     <MainSelectNoId
                         variant="small"
                         placeholder={"Select Company"}
