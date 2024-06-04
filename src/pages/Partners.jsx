@@ -139,7 +139,7 @@ export default function Partners({ title }) {
     const handleFilterClick = async () => {
         console.log("filter values ======== >", filterValues);
         try {
-            const response = await api.post(`/api-v1/filter/partners/get `, filterValues);
+            const response = await api.post(`/api-v1/partners/filter/partners/get`, filterValues);
             console.log('Response:', response.data);
         } catch (error) {
             console.error('Error:', error);
