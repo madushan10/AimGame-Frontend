@@ -6,19 +6,12 @@ import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 export default function MainSelectNoId({ options, label, placeholder, value, onChange, disabled, variant }) {
     const [query, setQuery] = useState('')
 
-    const filteredOptions =
-        query === ''
-            ? options
-            : options.filter((option) =>
-                option.company
-                    .toLowerCase()
-                    .replace(/\s+/g, '')
-                    .includes(query.toLowerCase().replace(/\s+/g, ''))
-            )
-
-            // console.log("OP Data On Main Select label: ", label);
-            // console.log("OP Data On Main Select all options: ", filteredOptions);
-            // console.log("OP Data On Main Selected value: ", value);
+    const filteredOptions = query === ''
+        ? options
+        : options.filter((option) =>
+            option.company &&
+            option.company.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, ''))
+        );
 
     const getHeight = () => {
         if(variant == "small"){
