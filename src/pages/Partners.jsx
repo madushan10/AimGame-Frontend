@@ -8,6 +8,7 @@ import Divider from '@mui/material/Divider';
 import MainSelect from '../components/MainSelect';
 import CreateUpdateModal from '../components/Authenticated/Partner/CreateUpdateModal';
 import api from '../services/api'
+import MainSelectNoId from '../components/MainSelectNoId';
 
 export default function Partners({ title }) {
     document.title = title;
@@ -20,7 +21,14 @@ export default function Partners({ title }) {
     const itemsPerPage = 10;
     const [workspaces, setWorkspaces] = useState([]);
     const [clients, setClients] = useState([]);
+    const [companies, setCompanies] = useState([]);
     const [selectedWorkspace, setSelectedWorkspace] = useState(null);
+
+    const [filterValues, setFilterValues] = useState({
+        workspace: null,
+        client: null,
+        company: null,
+    });
 
     const handleWorkspaceChange = async (workspaceId) => {
         try {
@@ -79,6 +87,20 @@ export default function Partners({ title }) {
         fetchWorkspaces();
     }, []);
 
+    useEffect(() => {
+        const fetchCompanies = async () => {
+            try {
+                const response = await api.get('/api-v1/partners/filter/companies/get');
+                setCompanies(response.data.data);
+                console.log("companies : ", response.data)
+            } catch (error) {
+                console.error('Error fetching workspaces:', error);
+            }
+        };
+
+        fetchCompanies();
+    }, []);
+
     console.log("tempData : ", tempData)
     // console.log("workspaces : ", workspaces)
 
@@ -89,6 +111,40 @@ export default function Partners({ title }) {
             setLoading(false);
         }, 3000);
     }, [loading]);
+
+
+
+
+    const handleAllWorkspaceChange = (workspaceId) => {
+        setFilterValues((prevValues) => ({
+            ...prevValues,
+            workspace: workspaceId,
+        }));
+    };
+
+    const handleClientChange = (clientId) => {
+        setFilterValues((prevValues) => ({
+            ...prevValues,
+            client: clientId,
+        }));
+    };
+
+    const handleCompanyChange = (companyId) => {
+        setFilterValues((prevValues) => ({
+            ...prevValues,
+            company: companyId,
+        }));
+    };
+
+    const handleFilterClick = async () => {
+        console.log("filter values ======== >", filterValues);
+        try {
+            const response = await api.post(`/api-v1/filter/partners/get `, filterValues);
+            console.log('Response:', response.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
     return (
         <AuthenticatedLayout>
@@ -143,25 +199,29 @@ export default function Partners({ title }) {
                         placeholder={"Select Workspace"}
                         options={workspaces}
                         onChange={(selectedOption) => {
-                            setSelectedWorkspace(selectedOption._id);
-                            handleWorkspaceChange(selectedOption._id);
+                            console.log(selectedOption.name);
+                            handleAllWorkspaceChange(selectedOption._id);
                         }}
                     />
                     <MainSelect
                         variant="small"
                         placeholder={"Select Client"}
                         options={clients}
+                        onChange={(selectedOption) => {
+                            console.log(selectedOption.name);
+                            handleClientChange(selectedOption.name);
+                        }}
                     />
-                    <MainSelect
+                    <MainSelectNoId
                         variant="small"
                         placeholder={"Select Company"}
-                        options={[
-                            { id: 1, name: 'Company 1' },
-                            { id: 2, name: 'Company 2' },
-                        ]}
+                        options={companies}
+                        onChange={(selectedOption) => {
+                            console.log(selectedOption.company);
+                            handleCompanyChange(selectedOption.company);
+                        }}
                     />
-                    <button onClick={() => {
-                }} className='flex items-center gap-3 justify-center bg-app-blue-2 rounded-lg w-full lg:w-fit px-6 py-2 text-white' >
+                    <button onClick={handleFilterClick} className='flex items-center gap-3 justify-center bg-app-blue-2 rounded-lg w-full lg:w-fit px-6 py-2 text-white' >
                     <div>Filter</div>
                 </button>
                 </div>
