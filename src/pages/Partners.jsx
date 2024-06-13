@@ -8,6 +8,7 @@ import Divider from '@mui/material/Divider';
 import MainSelect from '../components/MainSelect';
 import CreateUpdateModal from '../components/Authenticated/Partner/CreateUpdateModal';
 import api from '../services/api'
+import MainSelectNoId from '../components/MainSelectNoId';
 
 export default function Partners({ title }) {
     document.title = title;
@@ -20,7 +21,14 @@ export default function Partners({ title }) {
     const itemsPerPage = 10;
     const [workspaces, setWorkspaces] = useState([]);
     const [clients, setClients] = useState([]);
+    const [companies, setCompanies] = useState([]);
     const [selectedWorkspace, setSelectedWorkspace] = useState(null);
+
+    // client: null,
+    const [filterValues, setFilterValues] = useState({
+        workspace: null,
+        company: null,
+    });
 
     const handleWorkspaceChange = async (workspaceId) => {
         try {
@@ -79,6 +87,20 @@ export default function Partners({ title }) {
         fetchWorkspaces();
     }, []);
 
+    useEffect(() => {
+        const fetchCompanies = async () => {
+            try {
+                const response = await api.get('/api-v1/partners/filter/companies/get');
+                setCompanies(response.data.data);
+                console.log("companies : ", response.data)
+            } catch (error) {
+                console.error('Error fetching workspaces:', error);
+            }
+        };
+
+        fetchCompanies();
+    }, []);
+
     console.log("tempData : ", tempData)
     // console.log("workspaces : ", workspaces)
 
@@ -89,6 +111,41 @@ export default function Partners({ title }) {
             setLoading(false);
         }, 3000);
     }, [loading]);
+
+
+
+
+    const handleAllWorkspaceChange = (workspaceId) => {
+        setFilterValues((prevValues) => ({
+            ...prevValues,
+            workspace: workspaceId,
+        }));
+    };
+
+    // const handleClientChange = (clientId) => {
+    //     setFilterValues((prevValues) => ({
+    //         ...prevValues,
+    //         client: clientId,
+    //     }));
+    // };
+
+    const handleCompanyChange = (companyId) => {
+        setFilterValues((prevValues) => ({
+            ...prevValues,
+            company: companyId,
+        }));
+    };
+
+    const handleFilterClick = async () => {
+        console.log("filter values ======== >", filterValues);
+        try {
+            const response = await api.post(`/api-v1/partners/filter/partners/get`, filterValues);
+            console.log('Response:', response.data);
+            setTempData(response.data.data);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
     return (
         <AuthenticatedLayout>
@@ -118,7 +175,7 @@ export default function Partners({ title }) {
                 </button>
             </div>
             <div className='' >
-                <div className='flex flex-col lg:flex-row lg:justify-end my-3' >
+                {/* <div className='flex flex-col lg:flex-row lg:justify-end my-3' >
                     <MainSelect
                         variant="small"
                         placeholder={"Select Workspace"}
@@ -128,29 +185,46 @@ export default function Partners({ title }) {
                             handleWorkspaceChange(selectedOption._id);
                         }}
                     />
-                </div>
+                </div> */}
                 <div className='flex flex-col lg:flex-row gap-3 lg:gap-5' >
-                    <MainSelect
+                    {/* <MainSelect
                         variant="small"
                         placeholder={"Select Account"}
                         options={[
                             { id: 1, name: 'Account 1' },
                             { id: 2, name: 'Account 2' },
                         ]}
-                    />
+                    /> */}
                     <MainSelect
+                        variant="small"
+                        placeholder={"Select Workspace"}
+                        options={workspaces}
+                        onChange={(selectedOption) => {
+                            console.log(selectedOption.name);
+                            handleAllWorkspaceChange(selectedOption._id);
+                        }}
+                    />
+                    {/* <MainSelect
                         variant="small"
                         placeholder={"Select Client"}
                         options={clients}
-                    />
-                    <MainSelect
+                        onChange={(selectedOption) => {
+                            console.log(selectedOption.name);
+                            handleClientChange(selectedOption.name);
+                        }}
+                    /> */}
+                    <MainSelectNoId
                         variant="small"
                         placeholder={"Select Company"}
-                        options={[
-                            { id: 1, name: 'Company 1' },
-                            { id: 2, name: 'Company 2' },
-                        ]}
+                        options={companies}
+                        onChange={(selectedOption) => {
+                            console.log(selectedOption.company);
+                            handleCompanyChange(selectedOption.company);
+                        }}
                     />
+                    <button onClick={handleFilterClick} className='flex items-center gap-3 justify-center bg-app-blue-2 rounded-lg w-full lg:w-fit px-6 py-2 text-white' >
+                    <div>Filter</div>
+                </button>
                 </div>
             </div>
             <div className='bg-white rounded-lg mt-10' >
