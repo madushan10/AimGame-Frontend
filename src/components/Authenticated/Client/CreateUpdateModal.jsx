@@ -20,7 +20,8 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
 
     const [client, setClient] = useState(initialState)
     const [loading, setLoading] = useState(false)
-
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
 
     useEffect(() => {
         if (data) {
@@ -41,7 +42,9 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
     //     return;
     // }
     async function onCreate() {
-        console.log(client)
+        setLoading(true);
+
+     
         try {
             const missingFields = [];
 
@@ -56,47 +59,78 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
                 window.alert(`Please fill in all required fields: ${missingFields.join(', ')}.`);
                 return;
             }
-
-            const formData = new FormData();
-            formData.append('name', client.name);
-            formData.append('address', client.address);
-            formData.append('email', client.email);
-            formData.append('phone', client.phone);
-            formData.append('refNo', client.refNo);
-            formData.append('industryTypeId', client.industryTypeId);
-            formData.append('workspaceId', client.workspaceId);
-            // formData.append('photo', client.photo);
-
-            if (client.photo) {
-                formData.append('photo', client.photo);
-                console.log("client.photo : ", client.photo)
-            }
-            // if (typeof client.photo !== 'undefined' && client.photo !== null && client.photo !== 'undefined') {
-            //     formData.append('photo', client.photo);
-            //     console.log("client.photo : ", client.photo)
-            // }
-
-            const headers = { 'Content-Type': 'multipart/form-data' };
             document.getElementById("page-loader").style.display = 'block';
-            const response = await api.post('/api-v1/clients', formData, { headers });
-            console.log(response);
+            const response = await api.post('/api-v1/clients', client);
             if (response.status === 201) {
                 console.log('Client created successfully');
                 document.getElementById("page-loader").style.display = 'none';
-                window.alert('Client created successfully');
-                
-                onClose();
+                setSuccess("Client created successfully");
             } else {
-                console.error('Failed to create client:', response.statusText);
+                console.error('Failed to create Client:', response.statusText);
                 document.getElementById("page-loader").style.display = 'none';
-                window.alert(response.statusText);
+                setError(response.data.errors);
             }
         } catch (error) {
-            console.error('Error creating client:', error);
+            console.error('Error creating Client:', error);
             document.getElementById("page-loader").style.display = 'none';
-            window.alert('Failed to create client');
+            setError(error.message);
         }
+        setLoading(false);
     }
+    // async function onCreate() {
+    //     console.log(client)
+    //     try {
+    //         const missingFields = [];
+
+    //         if (!client.name) missingFields.push('Name');
+    //         if (!client.address) missingFields.push('Address');
+    //         if (!client.email) missingFields.push('Email');
+    //         if (!client.industryTypeId) missingFields.push('Industry Type');
+    //         if (!client.workspaceId) missingFields.push('Workspace');
+    //         if (!client.refNo) missingFields.push('Reference No');
+
+    //         if (missingFields.length > 0) {
+    //             window.alert(`Please fill in all required fields: ${missingFields.join(', ')}.`);
+    //             return;
+    //         }
+
+    //         const formData = new FormData();
+    //         formData.append('name', client.name);
+    //         formData.append('address', client.address);
+    //         formData.append('email', client.email);
+    //         formData.append('phone', client.phone);
+    //         formData.append('refNo', client.refNo);
+    //         formData.append('industryTypeId', client.industryTypeId);
+    //         formData.append('workspaceId', client.workspaceId);
+    //         // formData.append('photo', client.photo);
+
+    //         if (client.photo) {
+    //             formData.append('photo', client.photo);
+    //             console.log("client.photo : ", client.photo)
+    //         }
+    
+
+    //         const headers = { 'Content-Type': 'multipart/form-data' };
+    //         document.getElementById("page-loader").style.display = 'block';
+    //         const response = await api.post('/api-v1/clients', formData, { headers });
+    //         console.log(response);
+    //         if (response.status === 201) {
+    //             console.log('Client created successfully');
+    //             document.getElementById("page-loader").style.display = 'none';
+    //             window.alert('Client created successfully');
+                
+    //             onClose();
+    //         } else {
+    //             console.error('Failed to create client:', response.statusText);
+    //             document.getElementById("page-loader").style.display = 'none';
+    //             window.alert(response.statusText);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error creating client:', error);
+    //         document.getElementById("page-loader").style.display = 'none';
+    //         window.alert('Failed to create client');
+    //     }
+    // }
 
 
     async function onUpdate() {
@@ -154,12 +188,24 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
                 </div>
                 <div className='max-h-[80vh] h-[80vh] lg:h-fit overflow-scroll no-scrollbar' >
                     <div className='flex justify-center items-center mt-5' >
-                        <MainImageInput
+                        {/* <MainImageInput
                             type="client"
                             onChange={file => setClient({ ...client, photo: file })}
                             value={client?.photo}
+                        /> */}
+                        <MainImageInput
+                            type="client"
+                            onChange={file => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                            setClient({ ...client, photo: reader.result });
+                            };
+                            reader.readAsDataURL(file);
+                            }}
+                            value={client?.photo}
                         />
                     </div>
+  
                     <div className='grid gap-5 grid-cols-1 lg:grid-cols-2 px-10 pt-10' >
                         <MainInput
                             disabled={loading}
@@ -241,6 +287,10 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
                             label={"Business Address"}
                             placeholder={"Enter Business Address"}
                         />
+                    </div>
+                    <div className='px-10 ' >
+                    {error && <p className="text-red-500 mt-2 mb-2">{error}</p>}
+                    {success && <p className="text-green-500 mt-2 mb-2">{success}</p>}
                     </div>
                     <div className='flex justify-center items-center gap-5 mb-5' >
                         <button

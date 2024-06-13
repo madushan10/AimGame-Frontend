@@ -68,7 +68,7 @@ export default function CreateUpdateModal({ show, onClose, data }) {
             if (response.status === 201) {
                 console.log('Team Member created successfully');
                 document.getElementById("page-loader").style.display = 'none';
-                onClose();
+                setSuccess("Team Member created successfully.");
             } else {
                 console.error('Failed to create Team Member:', response.statusText);
                 document.getElementById("page-loader").style.display = 'none';
