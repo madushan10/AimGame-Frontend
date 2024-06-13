@@ -56,7 +56,9 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
             if (!client.refNo) missingFields.push('Reference No');
 
             if (missingFields.length > 0) {
-                window.alert(`Please fill in all required fields: ${missingFields.join(', ')}.`);
+               //window.alert(`Please fill in all required fields: ${missingFields.join(', ')}.`);
+                setError(`Please fill in all required fields: ${missingFields.join(', ')}.`);
+                setSuccess(null);
                 return;
             }
             document.getElementById("page-loader").style.display = 'block';
@@ -65,15 +67,18 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
                 console.log('Client created successfully');
                 document.getElementById("page-loader").style.display = 'none';
                 setSuccess("Client created successfully");
+                setError(null);
             } else {
                 console.error('Failed to create Client:', response.statusText);
                 document.getElementById("page-loader").style.display = 'none';
                 setError(response.data.errors);
+                setSuccess(null);
             }
         } catch (error) {
             console.error('Error creating Client:', error);
             document.getElementById("page-loader").style.display = 'none';
             setError(error.message);
+            setSuccess(null);
         }
         setLoading(false);
     }
@@ -136,19 +141,43 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
     async function onUpdate() {
         console.log(client)
         try {
+            const missingFields = [];
+
+            if (!client.name) missingFields.push('Name');
+            if (!client.address) missingFields.push('Address');
+            if (!client.email) missingFields.push('Email');
+            if (!client.industryTypeId) missingFields.push('Industry Type');
+            if (!client.workspaceId) missingFields.push('Workspace');
+            if (!client.refNo) missingFields.push('Reference No');
+
+            if (missingFields.length > 0) {
+                setError(`Please fill in all required fields: ${missingFields.join(', ')}.`);
+                setSuccess(null);
+                return;
+            }
+            document.getElementById("page-loader").style.display = 'block';
             const response = await api.put(`/api-v1/clients/${client._id}`, client);
 
             if (response.status === 200 || response.status === 201) {
-                console.log('Client updated successfully');
-                window.alert('Client updated successfully');
-                onClose();
+                // console.log('Client updated successfully');
+                // window.alert('Client updated successfully');
+                // onClose();
+                setError(null);
+                document.getElementById("page-loader").style.display = 'none';
+                setSuccess('Client updated successfully');
             } else {
-                console.error('Failed to update client:', response.statusText);
-                window.alert('Failed to update client');
+                // console.error('Failed to update client:', response.statusText);
+                // window.alert('Failed to update client');
+                setError('Failed to update client');
+                document.getElementById("page-loader").style.display = 'none';
+                setSuccess(null);
             }
         } catch (error) {
-            console.error('Error updating client:', error);
-            window.alert('Failed to update client');
+            // console.error('Error updating client:', error);
+            // window.alert('Failed to update client');
+            setError('Error updating client:', error);
+            document.getElementById("page-loader").style.display = 'none';
+            setSuccess(null);
         }
     }
 
