@@ -177,11 +177,11 @@ export default function Tasks() {
                         </div>
                     </div>
                 </div>
-                <button onClick={() => { }}
+                {/* <button onClick={() => { }}
                     className='flex items-center mt-10 gap-3 justify-center bg-app-blue-2 rounded-lg w-full lg:w-fit px-6 py-2 text-white'>
                     <PlusIcon className='w-6 h-6 text-white' />
                     <div>New Task</div>
-                </button>
+                </button> */}
             </div>
             <TaskViewModal
                 data={selectedData}
