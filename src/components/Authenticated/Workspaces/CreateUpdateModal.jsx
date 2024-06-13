@@ -16,7 +16,8 @@ const initialState = {}
 export default function CreateUpdateModal({ show, onClose, data }) {
     const [workspace, setWorkspace] = useState(initialState)
     const [loading, setLoading] = useState(false)
-
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
     useEffect(() => {
         if (data) {
             setWorkspace(data);
@@ -33,16 +34,20 @@ export default function CreateUpdateModal({ show, onClose, data }) {
     async function onCreate() {
         try {
             console.log(workspace);
+            document.getElementById("page-loader").style.display = 'block';
             const response = await api.post('/api-v1/workspaces', workspace);
             
             if (response.status === 201) {
-                console.log('Workspace created successfully');
-                onClose();
+                document.getElementById("page-loader").style.display = 'none';
+                setSuccess("Workspace created successfully.");
+                setError(null);
             } else {
-                console.error('Failed to create Workspace:', response.statusText);
+                setError('Failed to create Workspace:', response.statusText);
+                setSuccess(null);
             }
         } catch (error) {
-            console.error('Error creating Workspace:', error);
+            setError('Error creating Workspace:', error);
+            setSuccess(null);
         }
     }
 
@@ -51,13 +56,15 @@ export default function CreateUpdateModal({ show, onClose, data }) {
             const response = await api.put(`/api-v1/workspaces/${workspace._id}`, workspace);
 
             if (response.status === 200 || response.status === 201) {
-                console.log('Workspace updated successfully');
-                onClose();
+                setSuccess("Workspace updated successfully.");
+                setError(null);
             } else {
-                console.error('Failed to update Workspace:', response.statusText);
+                setError('Error update Workspace:', response.statusText);
+                setSuccess(null);
             }
         } catch (error) {
-            console.error('Error updating Workspace:', error);
+            setError('Error updating Workspace:', error);
+            setSuccess(null);
         }
     }
 
@@ -103,6 +110,10 @@ export default function CreateUpdateModal({ show, onClose, data }) {
                     type="hidden"
                     onChange={(text) => setWorkspace({ ...workspace, userID: text })} // Set the userID in the workspace
                 />
+                    </div>
+                    <div className='px-10 ' >
+                    {error && <p className="text-red-500 mt-2 mb-2">{error}</p>}
+                    {success && <p className="text-green-500 mt-2 mb-2">{success}</p>}
                     </div>
                     <div className='flex justify-center items-center gap-5 mb-5' >
                         {/* <button
