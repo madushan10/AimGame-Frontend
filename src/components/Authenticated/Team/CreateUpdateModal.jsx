@@ -69,15 +69,18 @@ export default function CreateUpdateModal({ show, onClose, data }) {
                 console.log('Team Member created successfully');
                 document.getElementById("page-loader").style.display = 'none';
                 setSuccess("Team Member created successfully.");
+                setError(null);
             } else {
                 console.error('Failed to create Team Member:', response.statusText);
                 document.getElementById("page-loader").style.display = 'none';
                 setError(response.data.errors);
+                setSuccess(null);
             }
         } catch (error) {
             console.error('Error creating client:', error);
             document.getElementById("page-loader").style.display = 'none';
             setError(error.message);
+            setSuccess(null);
         }
         setLoading(false);
     }
