@@ -56,7 +56,7 @@ export default function Clients({ title }) {
 
         fetchData();
     }, []);
-    // console.log("industryTypes data : ", industryTypes);
+    console.log("industryTypes data : ", industryTypes);
 
 
 

@@ -185,8 +185,9 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
     const selectedWorkspace = allworkspaces?.find(workspace => workspace._id === client?.workspaceId);
     console.log("Selected WOrkspace:", selectedWorkspace);
 
-    const selectedIndustryType = industryTypes?.find(industry => industry._id === client?.industryTypeId);
+    const selectedIndustryType = industryTypes?.find(industry => industry._id === client?.industryTypeId._id);
     console.log("Selected Industry:", selectedIndustryType);
+    console.log("industryTypeId:", client.industryTypeId._id);
 
     // const clientIndustryTypeId = client?.industryTypeId?._id;
     // const selectedIndustryType = industryTypes?.find(industry => industry._id === clientIndustryTypeId);
