@@ -16,11 +16,6 @@ export default function MainSelectLead({ options, label, placeholder, value, onC
                     .includes(query.toLowerCase().replace(/\s+/g, ''))
             )
 
-//  console.log("OP Data On Main Select label: ", label);
-            // console.log("OP Data On Main Select all options: ", filteredOptions);
-            // console.log("OP Data On Main Selected value: ", value);
-
-
     const getHeight = () => {
         if(variant == "small"){
             return "h-[35px]"
@@ -30,7 +25,7 @@ export default function MainSelectLead({ options, label, placeholder, value, onC
         }
         return "h-[48px]"
     }
-
+    
     return (
         <div className="relative">
             <label className='text-app-blue-2 font-normal text-sm lg:text-base' >{label}</label>
@@ -40,7 +35,7 @@ export default function MainSelectLead({ options, label, placeholder, value, onC
                         <Combobox.Input
                             placeholder={placeholder}
                             className={`w-full border-none ${getHeight()} outline-none pl-3 pr-10 text-sm lg:text-base leading-5 text-gray-900 bg-transparent`}
-                            displayValue={(option) => option.name}
+                            displayValue={(option) => option?.name || ''}
                             onChange={(event) => setQuery(event.target.value)}
                         />
                         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">

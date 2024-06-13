@@ -31,7 +31,7 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
             setClient(initialState)
         }
     }, [data])
-    console.log("client data : ", clients)
+    
 
 
 
@@ -184,10 +184,25 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
 
     const selectedWorkspace = allworkspaces?.find(workspace => workspace._id === client?.workspaceId);
     console.log("Selected WOrkspace:", selectedWorkspace);
+    console.log("workspaceId:", client.workspaceId);
 
-    const selectedIndustryType = industryTypes?.find(industry => industry._id === client?.industryTypeId._id);
+
+    
+    
+
+    const selectedIndustryType = industryTypes?.find(industry => industry._id === client?.industryTypeId);
+    
+    // console.log("Selected Client ===== :", client.industryTypeId._id);
+    // client.industryTypeId = client?.industryTypeId?._id;
+    // let SelectedIndustryTypeId = client
+    
+    console.log("industryTypeId:", client);
+    if (client.industryTypeId && client.industryTypeId._id) {
+        client.industryTypeId = client.industryTypeId._id;
+    }
+    
+    console.log("industryTypeId changed:", client);
     console.log("Selected Industry:", selectedIndustryType);
-    console.log("industryTypeId:", client.industryTypeId._id);
 
     // const clientIndustryTypeId = client?.industryTypeId?._id;
     // const selectedIndustryType = industryTypes?.find(industry => industry._id === clientIndustryTypeId);

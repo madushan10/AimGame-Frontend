@@ -108,7 +108,7 @@ export default function Clients({ title }) {
                 }
     
                 setClients(clientsData);
-                console.log("clients : ", clientsData)
+                
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -117,7 +117,7 @@ export default function Clients({ title }) {
         fetchData();
     }, []);
 
-    
+    // console.log("clients workspace data : ", clients)
 
     const fetchAllWorkspaces = async () => {
         try {
