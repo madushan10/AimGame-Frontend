@@ -63,7 +63,7 @@ export default function Login({ title }) {
                 localStorage.setItem('accessToken', data.token);
                 localStorage.setItem('userID', data.userID);
                 localStorage.setItem('userRole', data.userRole);
-                localStorage.setItem('data', data);
+                localStorage.setItem('userName', data.userName);
                 navigateTo('/dashboard');
             }
         } catch (error) {
