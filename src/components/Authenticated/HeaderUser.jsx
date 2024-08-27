@@ -10,9 +10,10 @@ export default function HeaderUser() {
                 sx={{ border: "0.5px solid #ABB3BB", objectFit: "contain" }}
             />
             <div className='text-sm' >
-                <div className='font-semibold' >Jason Maning</div>
-                <div className='text-xs' >Admin</div>
+                <div className='font-semibold' >{localStorage.userName}</div>
+                <div className='text-xs' >{localStorage.userRole}</div>
             </div>
         </div>
     )
 }
+ 
