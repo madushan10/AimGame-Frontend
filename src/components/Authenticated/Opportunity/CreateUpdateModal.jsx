@@ -62,7 +62,7 @@ const probability = [
 
 const opMappingRoles = [
     { name: "Test1", designation: "CEO", role: "CEO" },
-    { name: "Test2", designation: "Director",role: "Director" },
+    { name: "Test2", designation: "Director", role: "Director" },
     { name: "Test3", designation: "Manager", role: "Manager" },
     { name: "Test4", designation: "Team Member", role: "Team Member" },
 ]
@@ -111,6 +111,9 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
     const [message, setMessage] = useState('');
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+
+
+
     // const opportunityMappingRoles = data.opportunityMappingRoles;
 
 
@@ -138,8 +141,27 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
         }
     }, [data])
 
+    useEffect(() => {
+        if (funnelStatus && funnelStatus.length > 0) {
+            const defaultFunnelStatusId = funnelStatus[0]._id;
+            if (!opportunity.funnelStatusId) {
+                setOpportunity(prevState => ({
+                    ...prevState,
+                    funnelStatusId: defaultFunnelStatusId
+                }));
+            }
+        }
+    }, [funnelStatus, opportunity.funnelStatusId]);
+
+    // console.log("funnelStatus : - ", funnelStatus);
+    // if (funnelStatus.length > 0) {
+    //     console.log("funnelStatus index 0 _id : ", funnelStatus[0]._id);
+    // } else {
+    //     console.log("funnelStatus array is empty.");
+    // }
+
+
     async function onCreate() {
-        console.log("opportunity : ", opportunity)
         try {
             const missingFields = [];
             if (!opportunity.referenceNumber) missingFields.push('Reference Number');
@@ -147,55 +169,49 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
             if (!opportunity.workspaceId) missingFields.push('Workspace');
             if (!opportunity.clientId) missingFields.push('Client');
             if (!opportunity.leadId) missingFields.push('Lead');
-
             if (!opportunity.funnelStatusId) missingFields.push('Funnel Status');
             if (!opportunity.completionDate) missingFields.push('Completion Date');
-            if (!opportunity.partners) missingFields.push('Partners');
-            if (!opportunity.team) missingFields.push('Team Members');
-
+            if (!opportunity.partners.length) missingFields.push('Partners');
+            if (!opportunity.team.length) missingFields.push('Team Members');
 
             if (missingFields.length > 0) {
                 setSuccess(null);
                 setError(`Please fill in all required fields: ${missingFields.join(', ')}.`);
-                //window.alert(`Please fill in all required fields: ${missingFields.join(', ')}.`);
                 return;
             }
-            // console.log("opportunity : ", updatedOpportunity)
+
             const updatedOpportunity = {
                 ...opportunity,
                 completionDate: opportunity.completionDate || null,
                 leadId: opportunity.leadId._id || opportunity.leadId,
                 clientId: opportunity.clientId._id || opportunity.clientId,
                 workspaceId: opportunity.workspaceId._id || opportunity.workspaceId,
-                funnelStatusId: opportunity.funnelStatusId._id || opportunity.funnelStatusId
+                funnelStatusId: opportunity.funnelStatusId || "6565da8982ae860f776de5df"
             };
-            console.log("opportunity Updated : ", updatedOpportunity)
 
+            console.log("Opportunity Updated:", updatedOpportunity);
 
             document.getElementById("page-loader").style.display = 'block';
 
             const response = await api.post('/api-v1/opportunities', updatedOpportunity);
 
             if (response.status === 201) {
-                //setMessage('Opportunity created successfully');
                 setError(null);
                 document.getElementById("page-loader").style.display = 'none';
                 setSuccess(`Opportunity created successfully`);
                 setOpportunity(initialOpportunityState);
-                
             } else {
                 setSuccess(null);
                 document.getElementById("page-loader").style.display = 'none';
                 setError(`Failed to create opportunity`);
-                // console.error('Failed to create opportunity:', response.statusText);
             }
         } catch (error) {
             setSuccess(null);
             document.getElementById("page-loader").style.display = 'none';
             setError(`Failed to create opportunity`);
-            // console.error('Error creating opportunity:', error);
         }
     }
+    
 
     async function onUpdate() {
         console.log("Update data:", opportunity)
@@ -218,13 +234,17 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
             //window.alert(`Please fill in all required fields: ${missingFields.join(', ')}.`);
             return;
         }
+
+        const defaultFunnelStatus = funnelStatus.length > 0 ? funnelStatus[0]._id : null;
+        console.log("Default funnelStatus _id:", defaultFunnelStatus);
+
         const updatedOpportunity = {
             ...opportunity,
             completionDate: opportunity.completionDate || null,
             leadId: opportunity.leadId?._id || opportunity.leadId,
             clientId: opportunity.clientId?._id || opportunity.clientId,
             workspaceId: opportunity.workspaceId?._id || opportunity.workspaceId,
-            funnelStatusId: opportunity.funnelStatusId?._id || opportunity.funnelStatusId
+            funnelStatusId: opportunity.funnelStatusId?._id || defaultFunnelStatus || "6565da8982ae860f776de5df"
         };
 
         try {
@@ -247,9 +267,17 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
             setError(`Failed to update opportunity`);
         }
     }
+
+
+
+
+
     function isValidNumber(value) {
         return !isNaN(parseFloat(value)) && isFinite(value);
     }
+
+
+
 
     const fetchOpportunitiesMappingRoles = async () => {
         try {
@@ -259,6 +287,9 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
             console.error('Error fetching opportunities:', error);
         }
     };
+
+
+
     // console.log("funnel status :", funnelStatus)
     const handleFunnelStatusChange = (selectedStatus) => {
         const selectedStatusData = funnelStatus.find(row => row._id === selectedStatus?._id);
@@ -302,12 +333,12 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
     // allworkspaces?.find(row => row?.name === opportunity?.workspaceId?.name)
 
     const teamMemberIds = Array.isArray(opportunity.team) ? opportunity.team.map(member => member._id) : [];
-    console.log("teamMemberIds : ", teamMemberIds)
+    // console.log("teamMemberIds : ", teamMemberIds)
 
 
-    console.log("partners : ", partners)
-    console.log("teamMembers : ", teamMembers)
-    console.log("opportunity : ", opportunity)
+    // console.log("partners : ", partners)
+    // console.log("teamMembers : ", teamMembers)
+    // console.log("opportunity : ", opportunity)
 
     return (
         <Transition
@@ -417,7 +448,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
 
                     </div>
                     <div className='px-10 py-5 flex flex-col gap-5' >
-                        
+
                         <MainDateInput
                             disabled={loading}
                             value={opportunity?.completionDate || ""}
@@ -438,16 +469,16 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                                 options={clients ?? []}
                             /> */}
                             <MainSelectLead
-                            disabled={loading}
-                            value={selectedClient || ''}
-                            onChange={value => setOpportunity({
-                                ...opportunity,
-                                clientId: value?._id || ''
-                            })}
-                            label={"Clients"}
-                            placeholder={"Please Select Client"}
-                            options={clients ?? []}
-                        />
+                                disabled={loading}
+                                value={selectedClient || ''}
+                                onChange={value => setOpportunity({
+                                    ...opportunity,
+                                    clientId: value?._id || ''
+                                })}
+                                label={"Clients"}
+                                placeholder={"Please Select Client"}
+                                options={clients ?? []}
+                            />
                             <div className='mt-2 flex justify-end' >
                                 <button
                                     onClick={onOpMappingAddClick}
@@ -547,7 +578,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                             </div>
                         }
 
-                        
+
                         {data &&
                             <div>
                                 {/* <MainMultipleSelectTasks
