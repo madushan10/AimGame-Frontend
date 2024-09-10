@@ -82,17 +82,30 @@ const initialState = {
     mappingRoles: [],
 }
 
+const initialOpportunityState = {
+    name: '',
+    referenceNumber: '',
+    leadId: '',
+    workspaceId: '',
+    clientId: '',
+    funnelStatusId: '',
+    completionDate: '',
+    partners: [],
+    team: [],
+    probability: 0,
+    mappingRoles: [],
+};
 
 
 
 export default function CreateUpdateModal({ show, onClose, data, onPartnerAddClick, onTaskAddClick, onOpMappingAddClick, leadData, partners, teamMembers, clients, allworkspaces, tasks, funnelStatus }) {
 
-    // const [opportunity, setOpportunity] = useState(initialState)
-    const [opportunity, setOpportunity] = useState({
-        name: '',
-        referenceNumber: '',
-        leadId: '',
-    })
+    const [opportunity, setOpportunity] = useState(initialOpportunityState);
+    // const [opportunity, setOpportunity] = useState({
+    //     name: '',
+    //     referenceNumber: '',
+    //     leadId: '',
+    // })
     const [loading, setLoading] = useState(false)
     const [mappingRoles, setMappingRoles] = useState([]);
     const [message, setMessage] = useState('');
@@ -105,11 +118,9 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
 
     useEffect(() => {
         if (leadData && leadData.length > 0) {
-            // Find the lead with the same name as the opportunity's leadId
             const selectedLead = leadData.find(row => row?.name === opportunity.leadId?.name);
 
             if (selectedLead) {
-                // Set the opportunity state with the selected lead's ID
                 setOpportunity(prevState => ({
                     ...prevState,
                     leadId: selectedLead._id
@@ -123,7 +134,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
             setOpportunity(data)
         }
         if (!data) {
-            setOpportunity(initialState)
+            setOpportunity(initialOpportunityState)
         }
     }, [data])
 
@@ -170,7 +181,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                 setError(null);
                 document.getElementById("page-loader").style.display = 'none';
                 setSuccess(`Opportunity created successfully`);
-
+                setOpportunity(initialOpportunityState);
                 // console.log('Opportunity created successfully');
                 //window.alert('Opportunity created successfully');
                 //onClose();
@@ -228,6 +239,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                 setError(null);
                 document.getElementById("page-loader").style.display = 'none';
                 setSuccess(`Opportunity updated successfully`);
+                setOpportunity(initialOpportunityState);
                 // console.log('Client updated successfully');
                 //onClose();
             } else {
@@ -343,24 +355,8 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                             label={"Reference Number"}
                             placeholder={"Enter Reference Number"}
                         />
-                        {/* <MainSelect
-                            disabled={loading}
-                            value={leadData?.find(row => row?.name === opportunity?.leadId?.name)}
-                            onChange={value => setOpportunity({
-                                ...opportunity,
-                                leadId: value?._id || ''
-                            })}
-                            label={"Opportunity Lead"}
-                            placeholder={"Please Select Opportunity Lead"}
-                            options={leadData ?? []}
-                        /> */}
                         <MainSelectLead
                             disabled={loading}
-                            // value={
-                            //     opportunity.leadId
-                            //         ? leadData.find(lead => lead._id === opportunity.leadId)?.name || ''
-                            //         : ''
-                            // }
                             value={selectedLead}
                             onChange={value => setOpportunity({
                                 ...opportunity,
@@ -380,35 +376,6 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                         />
 
 
-                        {/* <MainSelect
-                            disabled={loading}
-                            value={opportunity.leadId}
-                            onChange={value => setOpportunity({
-                                ...opportunity,
-                                leadId: value
-                            })}
-                            label={"Opportunity Lead"}
-                            placeholder={"Please Select Opportunity Lead"}
-                            options={leadData ?? []}
-                        /> */}
-                        {/* <MainInput
-                            disabled={true}
-                            value={
-                                opportunity.leadId
-                                    ? leadData.find(lead => lead._id === opportunity.leadId)?.name || ''
-                                    : ''
-                            }
-                            label={"Opportunity Lead"}
-                            placeholder={"Please Select Opportunity Lead"}
-                        /> */}
-                        {/* <MainSelect
-                            disabled={loading}
-                            value={designations?.find(row => row?.name == opportunity?.designation)}
-                            onChange={value => setOpportunity({ ...opportunity, designation: value?.name })}
-                            label={"Designation"}
-                            placeholder={"Please Select Designation"}
-                            options={designations ?? []}
-                        /> */}
                         <MainSelectFunnelStatus
                             disabled={loading}
                             value={funnelStatus?.find(row => row?.status === opportunity?.funnelStatusId?.status)}
@@ -460,17 +427,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
 
                     </div>
                     <div className='px-10 py-5 flex flex-col gap-5' >
-                        {/* <MainSelect
-                            disabled={loading}
-                            value={clients?.find(row => row?.name === opportunity?.clientId?.name)}
-                            onChange={value => setOpportunity({
-                                ...opportunity,
-                                clientId: value?._id || ''
-                            })}
-                            label={"Clients"}
-                            placeholder={"Please Select Client"}
-                            options={clients ?? []}
-                        /> */}
+                        
                         <MainDateInput
                             disabled={loading}
                             value={opportunity?.completionDate || ""}
