@@ -238,16 +238,13 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
             return;
         }
 
-        const defaultFunnelStatus = funnelStatus.length > 0 ? funnelStatus[0]._id : null;
-        console.log("Default funnelStatus _id:", defaultFunnelStatus);
-
         const updatedOpportunity = {
             ...opportunity,
             completionDate: opportunity.completionDate || null,
             leadId: opportunity.leadId?._id || opportunity.leadId,
             clientId: opportunity.clientId?._id || opportunity.clientId,
             workspaceId: opportunity.workspaceId?._id || opportunity.workspaceId,
-            funnelStatusId: opportunity.funnelStatusId?._id || defaultFunnelStatus || "6565da8982ae860f776de5df"
+            funnelStatusId: opportunity.funnelStatusId?._id || opportunity.funnelStatusId
         };
 
         try {
