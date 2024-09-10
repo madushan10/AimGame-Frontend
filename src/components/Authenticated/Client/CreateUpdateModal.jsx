@@ -9,7 +9,7 @@ import MainMultipleSelect from '../../MainMultipleSelect'
 import MainImageInput from '../../MainImageInput'
 import api from '../../../services/api'
 import MainSelectLead from '../../MainSelectLead'
-
+const base_url = import.meta.env.VITE_REACT_APP_API_BASE_URL;
 
 const initialState = {
     industryTypeId: null,
@@ -54,25 +54,41 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
             if (!client.industryTypeId) missingFields.push('Industry Type');
             if (!client.workspaceId) missingFields.push('Workspace');
             if (!client.refNo) missingFields.push('Reference No');
-
+            if (!client.phone) missingFields.push('Contact Number');
+            
             if (missingFields.length > 0) {
                //window.alert(`Please fill in all required fields: ${missingFields.join(', ')}.`);
                 setError(`Please fill in all required fields: ${missingFields.join(', ')}.`);
                 setSuccess(null);
+                setLoading(false);
                 return;
             }
+
+            
+            
             document.getElementById("page-loader").style.display = 'block';
-            const response = await api.post('/api-v1/clients', client);
-            if (response.status === 201) {
-                console.log('Client created successfully');
+            const response = await fetch(`${base_url}/api-v1/clients`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.accessToken}`,
+                },
+                
+                body: JSON.stringify(client),
+            });
+            
+       
+
+            if (!response.ok) {
+                document.getElementById("page-loader").style.display = 'none';
+                const errorData = await response.json();
+                setError(errorData.errors);
+                setSuccess(null);
+            } else {
                 document.getElementById("page-loader").style.display = 'none';
                 setSuccess("Client created successfully");
                 setError(null);
-            } else {
-                console.error('Failed to create Client:', response.statusText);
-                document.getElementById("page-loader").style.display = 'none';
-                setError(response.data.errors);
-                setSuccess(null);
+                onClose();
             }
         } catch (error) {
             console.error('Error creating Client:', error);
@@ -149,28 +165,35 @@ export default function CreateUpdateModal({ show, onClose, data, industryTypes, 
             if (!client.industryTypeId) missingFields.push('Industry Type');
             if (!client.workspaceId) missingFields.push('Workspace');
             if (!client.refNo) missingFields.push('Reference No');
-
+            if (!client.phone) missingFields.push('Contact Number');
+            
             if (missingFields.length > 0) {
                 setError(`Please fill in all required fields: ${missingFields.join(', ')}.`);
                 setSuccess(null);
                 return;
             }
             document.getElementById("page-loader").style.display = 'block';
-            const response = await api.put(`/api-v1/clients/${client._id}`, client);
+            //const response = await api.put(`/api-v1/clients/${client._id}`, client);
+            const response = await fetch(`${base_url}/api-v1/clients/${client._id}`, {
+                method: 'put',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.accessToken}`,
+                },
+                
+                body: JSON.stringify(client),
+            });
 
-            if (response.status === 200 || response.status === 201) {
-                // console.log('Client updated successfully');
-                // window.alert('Client updated successfully');
-                // onClose();
-                setError(null);
+            if (!response.ok) {
                 document.getElementById("page-loader").style.display = 'none';
-                setSuccess('Client updated successfully');
-            } else {
-                // console.error('Failed to update client:', response.statusText);
-                // window.alert('Failed to update client');
-                setError('Failed to update client');
-                document.getElementById("page-loader").style.display = 'none';
+                const errorData = await response.json();
+                setError(errorData.errors);
                 setSuccess(null);
+            } else {
+                document.getElementById("page-loader").style.display = 'none';
+                setSuccess("Client updated successfully");
+                setError(null);
+                onClose();
             }
         } catch (error) {
             // console.error('Error updating client:', error);

@@ -3,7 +3,7 @@ import GuestLayout from '../../layouts/GuestLayout'
 import MainInput from '../../components/MainInput'
 import MainButton from '../../components/MainButton'
 import { useNavigate } from 'react-router-dom';
-
+const base_url = import.meta.env.VITE_REACT_APP_API_BASE_URL;
 export default function PasswordResetSend({ title }) {
     document.title = title;
     const [error, setError] = useState(null);
@@ -12,11 +12,12 @@ export default function PasswordResetSend({ title }) {
         e.preventDefault();
 
         try {
-            const email = e.target.email.value;
+            document.getElementById("page-loader").style.display = 'block';
+            const email = e.target.email.value.trim();
 
             console.log(JSON.stringify({email}));
-
-            const response = await fetch(`https://aim-game-backend.vercel.app/api-v1/auth/forget-password`, {
+ 
+            const response = await fetch(`${base_url}/api-v1/auth/forget-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -27,17 +28,20 @@ export default function PasswordResetSend({ title }) {
             });
 
             if (!response.ok) {
+                document.getElementById("page-loader").style.display = 'none';
                 const errorData = await response.json();
                 setError(errorData.errors);
             } else {
+                document.getElementById("page-loader").style.display = 'none';
                 // const data = await response.json();
                 localStorage.setItem('otpEmail', email);
                 localStorage.setItem('verifyType', 'reset');
                 navigateTo('/password-reset/verify');
             }
         } catch (error) {
+            document.getElementById("page-loader").style.display = 'none';
             console.error('Error occurred:', error);
-            setError('An unexpected error occurred.');
+            setError(error.message);
         }
     };
 

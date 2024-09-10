@@ -5,7 +5,7 @@ import MainInput from '../components/MainInput';
 import MainPasswordInput from '../components/MainPasswordInput';
 import Link from '../components/Link';
 import { useNavigate } from 'react-router-dom';
-
+const base_url = import.meta.env.VITE_REACT_APP_API_BASE_URL;
 export default function Register({ title }) {
     document.title = title;
 
@@ -14,53 +14,64 @@ export default function Register({ title }) {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-
+    
         try {
             const name = e.target.name.value;
             const email = e.target.email.value;
             const password = e.target.password.value;
             const confirm_password = e.target.confirm_password.value;
             const userRole = "admin";
-            if(password != confirm_password){
-                setError("Passwords dose not match");
+    
+            // Password validation regex
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+    
+            // Check if passwords match
+            if (password !== confirm_password) {
+                setError("Passwords do not match");
+                return;
             }
-            else{
-            console.log(JSON.stringify({ name,email, password, userRole }));
+    
+            // Check for strong password
+            if (!passwordRegex.test(password)) {
+                setError("Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character.");
+                return;
+            }
+    
+            console.log(JSON.stringify({ name, email, password, userRole }));
             document.getElementById("page-loader").style.display = 'block';
-            const response = await fetch(`https://aim-game-backend.vercel.app/api-v1/users`, {
+    
+            const response = await fetch(`${base_url}/api-v1/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name,email, password, userRole }),
+                body: JSON.stringify({ name, email, password, userRole }),
             });
-
+    
             if (!response.ok) {
                 document.getElementById("page-loader").style.display = 'none';
                 const errorData = await response.json();
-                if(errorData.errors == "Email Already registered, But OTP is not confirmed"){
+    
+                if (errorData.errors === "Email Already registered, But OTP is not confirmed") {
                     setError(errorData.errors);
                     localStorage.setItem('otpEmail', email);
                     localStorage.setItem('verifyType', 'admin');
                     navigateTo('/password-reset/verify');
-                }
-                else{
+                } else {
                     setError(errorData.errors);
                 }
-                
             } else {
                 document.getElementById("page-loader").style.display = 'none';
-                //const data = await response.json();
                 localStorage.setItem('otpEmail', email);
                 localStorage.setItem('verifyType', 'admin');
                 navigateTo('/password-reset/verify');
             }
-        }
         } catch (error) {
             console.error('Error occurred:', error);
             setError('An unexpected error occurred.');
         }
     };
+    
 
     return (
         <GuestLayout
@@ -77,11 +88,13 @@ export default function Register({ title }) {
                     name="email"
                     label={"Email"}
                     placeholder={"Enter Email Address"}
+                    autocomplete={"off"}
                 />
                 <MainPasswordInput
                     name="password"
                     label={"Password"}
                     placeholder={"Enter Password"}
+                    autocomplete={"off"}
                 />
                 <MainPasswordInput
                     name="confirm_password"

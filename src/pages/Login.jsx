@@ -6,7 +6,7 @@ import MainPasswordInput from '../components/MainPasswordInput';
 import Link from '../components/Link';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api'
-
+const base_url = import.meta.env.VITE_REACT_APP_API_BASE_URL;
 export default function Login({ title }) {
     document.title = title;
 
@@ -40,12 +40,12 @@ export default function Login({ title }) {
         
         try {
             document.getElementById("page-loader").style.display = 'block';
-            const email = e.target.email.value;
-            const password = e.target.password.value;
+            const email = e.target.email.value.trim();
+            const password = e.target.password.value.trim();
 
             console.log(JSON.stringify({ email, password }));
 
-            const response = await fetch(`https://aim-game-backend.vercel.app/api-v1/auth/login`, {
+            const response = await fetch(`${base_url}/api-v1/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

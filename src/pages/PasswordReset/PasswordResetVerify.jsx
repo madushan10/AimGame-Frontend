@@ -3,7 +3,7 @@ import GuestLayout from '../../layouts/GuestLayout'
 import MainOtpInput from '../../components/MainOtpInput'
 import MainButton from '../../components/MainButton'
 import { useNavigate } from 'react-router-dom';
-
+const base_url = import.meta.env.VITE_REACT_APP_API_BASE_URL;
 export default function PasswordResetVerify({title}) {
     document.title = title;
     const [error, setError] = useState(null);
@@ -14,11 +14,12 @@ export default function PasswordResetVerify({title}) {
         e.preventDefault();
 
         try {
+            document.getElementById("page-loader").style.display = 'block';
             const email = localStorage.otpEmail;
 
             console.log(JSON.stringify({email, otp}));
             
-            const response = await fetch(`https://aim-game-backend.vercel.app/api-v1/users/verify`, {
+            const response = await fetch(`${base_url}/api-v1/auth/verify`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -29,9 +30,11 @@ export default function PasswordResetVerify({title}) {
             });
 
             if (!response.ok) {
+                document.getElementById("page-loader").style.display = 'none';
                 const errorData = await response.json();
                 setError(errorData.errors);
             } else {
+                document.getElementById("page-loader").style.display = 'none';
                 const verifyType = localStorage.verifyType;
                 if(verifyType == "admin"){
                     navigateTo('/');
@@ -43,8 +46,9 @@ export default function PasswordResetVerify({title}) {
                 
             }
         } catch (error) {
+            document.getElementById("page-loader").style.display = 'none';
             console.error('Error occurred:', error);
-            setError('An unexpected error occurred.');
+            setError(error.message);
         }
     };
 
@@ -56,7 +60,7 @@ export default function PasswordResetVerify({title}) {
 
             console.log(JSON.stringify({email}));
 
-            const response = await fetch('http://13.126.15.131:4065/api-v1/auth/forget-password', {
+            const response = await fetch(`${base_url}/api-v1/auth/forget-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,13 +79,13 @@ export default function PasswordResetVerify({title}) {
             }
         } catch (error) {
             console.error('Error occurred:', error);
-            setError('An unexpected error occurred.');
+            setError(error.message);
         }
-    };
+    }; 
     return (
         <GuestLayout
             headerText={"Check your email for a code"}
-            secondaryHeaderText={`We've sent a 6-digit code to yourworspace@business.com. The code expires shortly, please enter it soon`}
+            secondaryHeaderText={`We've sent a 6-digit code to ${localStorage.otpEmail}. The code expires shortly, please enter it soon`}
         >
             <form className='flex flex-col  gap-5 w-[90%] lg:w-[450px] mt-10' onSubmit={handleFormSubmit} >
                 <MainOtpInput
