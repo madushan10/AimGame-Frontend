@@ -182,12 +182,8 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                 document.getElementById("page-loader").style.display = 'none';
                 setSuccess(`Opportunity created successfully`);
                 setOpportunity(initialOpportunityState);
-                // console.log('Opportunity created successfully');
-                //window.alert('Opportunity created successfully');
-                //onClose();
+                
             } else {
-                //setMessage('Failed to create opportunity');
-                //window.alert('Failed to create opportunity');
                 setSuccess(null);
                 document.getElementById("page-loader").style.display = 'none';
                 setError(`Failed to create opportunity`);
@@ -240,19 +236,15 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                 document.getElementById("page-loader").style.display = 'none';
                 setSuccess(`Opportunity updated successfully`);
                 setOpportunity(initialOpportunityState);
-                // console.log('Client updated successfully');
-                //onClose();
             } else {
                 setSuccess(null);
                 document.getElementById("page-loader").style.display = 'none';
                 setError(`Failed to update opportunity`);
-                // console.error('Failed to update client:', response.statusText);
             }
         } catch (error) {
             setSuccess(null);
             document.getElementById("page-loader").style.display = 'none';
             setError(`Failed to update opportunity`);
-            // console.error('Error updating client:', error);
         }
     }
     function isValidNumber(value) {
@@ -285,7 +277,6 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
 
 
     };
-    // console.log("Update data:", opportunity)
     useEffect(() => {
         fetchOpportunitiesMappingRoles();
     }, [])
@@ -293,18 +284,17 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
     useEffect(() => {
     }, [opportunity])
 
-    // console.log("data : ", data || '')
+    // console.log("Selected clients:", clients);
+    // console.log("Selected lead:", leadData);
 
-
-
-    // let leadValue = {};
-    // if(selectedLead === null){
-    //     console.log("Selected Lead:", selectedLead)
-    // }else{
-    //     leadValue = selectedLead;
-    // }
 
     const selectedLead = leadData?.find(lead => lead._id === opportunity?.leadId);
+    const selectedClient = clients?.find(client => client._id === opportunity?.clientId);
+    console.log("Selected clients id:", selectedClient);
+    console.log("Selected lead:", selectedLead);
+
+
+    // value={clients?.find(row => row?.name === opportunity?.clientId?.name) || ''}
     // console.log("Selected Lead:", selectedLead);
 
     const selectedWorkspace = allworkspaces?.find(workspace => workspace._id === opportunity?.workspaceId);
@@ -357,7 +347,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                         />
                         <MainSelectLead
                             disabled={loading}
-                            value={selectedLead}
+                            value={selectedLead || ''}
                             onChange={value => setOpportunity({
                                 ...opportunity,
                                 leadId: value?._id || ''
@@ -436,9 +426,9 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                             placeholder={""}
                         />
                         <div>
-                            <MainSelect
+                            {/* <MainSelect
                                 disabled={loading}
-                                value={clients?.find(row => row?.name === opportunity?.clientId?.name)}
+                                value={clients?.find(row => row?.name === opportunity?.clientId?.name) || ''}
                                 onChange={value => setOpportunity({
                                     ...opportunity,
                                     clientId: value?._id || ''
@@ -446,7 +436,18 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                                 label={"Clients"}
                                 placeholder={"Please Select Client"}
                                 options={clients ?? []}
-                            />
+                            /> */}
+                            <MainSelectLead
+                            disabled={loading}
+                            value={selectedClient || ''}
+                            onChange={value => setOpportunity({
+                                ...opportunity,
+                                clientId: value?._id || ''
+                            })}
+                            label={"Clients"}
+                            placeholder={"Please Select Client"}
+                            options={clients ?? []}
+                        />
                             <div className='mt-2 flex justify-end' >
                                 <button
                                     onClick={onOpMappingAddClick}
@@ -462,7 +463,7 @@ export default function CreateUpdateModal({ show, onClose, data, onPartnerAddCli
                         <MainSelectLead
                             disabled={loading}
                             // value={allworkspaces?.find(row => row?.name === opportunity?.workspaceId?.name)}
-                            value={selectedWorkspace}
+                            value={selectedWorkspace || ''}
                             onChange={value => setOpportunity({
                                 ...opportunity,
                                 workspaceId: value?._id || ''
