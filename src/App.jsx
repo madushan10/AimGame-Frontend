@@ -34,19 +34,20 @@ import ClientOpportunities from "./pages/ClientOpportunities";
 import Presales from "./pages/Presales";
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isRemember, setIsRemember] = useState(false);
 
   useEffect(() => {
     const remembered = localStorage.getItem("remember");
-    if (remembered === "true") {
-      setIsLoggedIn(true);
+    const loggedIn = localStorage.getItem("userID");
+    if (remembered === "true" && loggedIn != false) {
+      setIsRemember(true);
     }
   }, []);
   return (
     <MainContextProvider>
       <BrowserRouter>
         <Routes >
-        <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login title={"Aimgame | Login"} />} />
+        <Route path="/" element={isRemember ? <Navigate to="/dashboard" /> : <Login title={"Aimgame | Login"} />} />
           <Route path="/register" element={<Register title={"Aimgame | Register"} />} />
           <Route path="/login/workspace" element={<LoginWorkspace title={"Aimgame | Login Workspace"} />} />
           <Route path="/login/workspace-select" element={<LoginWorkspaceSelect title={"Aimgame | Select Workspace"} />} />
