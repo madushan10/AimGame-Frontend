@@ -72,6 +72,13 @@ export default function Login({ title }) {
         }
     };
 
+    const [rememberMe, setRememberMe] = useState(false);
+
+    const handleCheckboxChange = (event) => {
+        setRememberMe(event.target.checked);
+        localStorage.setItem('remember', true);
+    };
+
     return (
         <GuestLayout
             headerText={"Sign In"}
@@ -88,9 +95,22 @@ export default function Login({ title }) {
                     label={"Password"}
                     placeholder={"Enter Password"}
                 />
-                <div className='flex justify-end'>
+             <div className='flex justify-between w-full items-center'>
+                <div className='flex items-center'>
+                    <input
+                        type='checkbox'
+                        id='rememberMe'
+                        checked={rememberMe}
+                        onChange={handleCheckboxChange}
+                        className='mr-2'
+                    />
+                    <label htmlFor='rememberMe'>Remember me</label>
+                </div>
+                <div>
                     <Link href={"/password-reset/send"}>{"Forget Password?"}</Link>
                 </div>
+            </div>
+               
                 {error && <p className="text-red-500">{error}</p>}
                 <MainButton className="mt-5">{"Sign in"}</MainButton>
 
