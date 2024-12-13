@@ -96,7 +96,7 @@ export default function CreateUpdateModal({
       };
     });
   };
-  
+
 
 
   const updateContactField = (index, field, value) => {
@@ -116,7 +116,7 @@ export default function CreateUpdateModal({
       contacts: prevState.contacts.filter((_, i) => i !== index),
     }));
   };
-  
+
 
   async function onCreate() {
     setError(null);
@@ -315,57 +315,59 @@ export default function CreateUpdateModal({
           </div>
           <div className="px-10 pt-10 pb-5">
             {partner.contacts.map((contact, index) => (
-              <div key={index} className="contact-item grid gap-5 grid-cols-1 lg:grid-cols-2 border p-2 rounded mb-2">
-                <MainInput
-                  value={contact.name}
-                  onChange={(text) => updateContactField(index, "name", text)}
-                  label={`Contact Person ${index + 1} Name`}
-                  placeholder="Enter contact name"
-                />
-                <MainInput
-                  value={contact.designation}
-                  onChange={(text) => updateContactField(index, "designation", text)}
-                  label={`Contact Person ${index + 1} Designation`}
-                  placeholder="Enter contact designation"
-                />
-                <MainInput
-                  value={contact.email}
-                  onChange={(text) => updateContactField(index, "email", text)}
-                  label={`Contact Person ${index + 1} Email`}
-                  placeholder="Enter contact email"
-                />
-                <MainInput
-                  value={contact.phone}
-                  onChange={(text) => updateContactField(index, "phone", text)}
-                  label={`Contact Person ${index + 1} Phone`}
-                  placeholder="Enter contact phone"
-                />
-                <MainInput
-                  value={contact.business}
-                  onChange={(text) => updateContactField(index, "business", text)}
-                  label={`Contact Person ${index + 1} Business`}
-                  placeholder="Enter contact business"
-                />
-                {/* <MainInput
-                    type="checkbox"
-                    checked={contact.isPrimary}
-                    onChange={(e) =>
-                      updateContactField(index, "isPrimary", e.target.checked)
-                    }
-                    label="Is Primary Contact"
-                  />*/}
-                {/* <button type="button" onClick={() => removeContact(index)}>
+              <div key={index} className="d-flex flex-column">
+                <div className="font-semibold">
+                  <span>
+                    {index === 0 ? (
+                      <>
+                        Contact Person Details <span className="text-app-blue-4">{data?.name}</span>
+                      </>
+                    ) : (
+                      "Another Person Contact Details"
+                    )}
+                  </span>
+                </div>
+                <div className="contact-item grid gap-5 grid-cols-1 lg:grid-cols-2 border p-2 rounded mb-5">
+                  <MainInput
+                    value={contact.name}
+                    onChange={(text) => updateContactField(index, "name", text)}
+                    label={`Name`}
+                    placeholder="Enter name"
+                  />
+                  <MainInput
+                    value={contact.designation}
+                    onChange={(text) => updateContactField(index, "designation", text)}
+                    label={`Designation`}
+                    placeholder="Enter designation"
+                  />
+                  <MainInput
+                    value={contact.email}
+                    onChange={(text) => updateContactField(index, "email", text)}
+                    label={`Email`}
+                    placeholder="Enter email"
+                  />
+                  <MainInput
+                    value={contact.phone}
+                    onChange={(text) => updateContactField(index, "phone", text)}
+                    label={`Phone Number`}
+                    placeholder="Enter phone"
+                  />
+                  <MainInput
+                    value={contact.business}
+                    onChange={(text) => updateContactField(index, "business", text)}
+                    label={`Business`}
+                    placeholder="Enter Business"
+                  />
+                  <button
+                    onClick={() => removeContact(index)}
+                    className="flex items-center gap-2 text-app-blue text-xs"
+                  >
+                    <div className="border border-app-blue">
+                      <MinusIcon className="w-3 h-3" />
+                    </div>
                     Remove Contact
-                  </button>  */}
-                <button
-                  onClick={() => removeContact(index)}
-                  className="flex items-center gap-2 text-app-blue text-xs"
-                >
-                  <div className="border border-app-blue">
-                    <MinusIcon className="w-3 h-3" />
-                  </div>
-                  Remove Contact
-                </button>
+                  </button>
+                </div>
               </div>
             ))}
             <div className="d-flex py-3">
