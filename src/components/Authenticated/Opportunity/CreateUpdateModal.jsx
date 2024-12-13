@@ -98,6 +98,8 @@ export default function CreateUpdateModal({
   onClose,
   data,
   onPartnerAddClick,
+  onWorkspaceAddClick,
+  onTeamMemberAddClick,
   onTaskAddClick,
   onOpMappingAddClick,
   leadData,
@@ -378,7 +380,7 @@ export default function CreateUpdateModal({
     fetchOpportunitiesMappingRoles();
   }, []);
 
-  useEffect(() => {}, [opportunity]);
+  useEffect(() => { }, [opportunity]);
 
   // console.log("Selected clients:", clients);
   // console.log("Selected lead:", leadData);
@@ -521,9 +523,8 @@ export default function CreateUpdateModal({
               >
                 <div
                   style={{
-                    width: `${
-                      parseFloat(opportunity?.funnelStatusId?.level) || 0
-                    }%`,
+                    width: `${parseFloat(opportunity?.funnelStatusId?.level) || 0
+                      }%`,
                     height: "20px",
                     backgroundColor: "#30385e",
                     borderRadius: "8px",
@@ -598,20 +599,34 @@ export default function CreateUpdateModal({
                 </button>
               </div>
             </div>
-            <MainSelectLead
-              disabled={loading}
-              // value={allworkspaces?.find(row => row?.name === opportunity?.workspaceId?.name)}
-              value={selectedWorkspace || ""}
-              onChange={(value) =>
-                setOpportunity({
-                  ...opportunity,
-                  workspaceId: value?._id || "",
-                })
-              }
-              label={"Workspace"}
-              placeholder={"Please Select Workspace"}
-              options={allworkspaces ?? []}
-            />
+            <div>
+              <MainSelectLead
+                disabled={loading}
+                // value={allworkspaces?.find(row => row?.name === opportunity?.workspaceId?.name)}
+                value={selectedWorkspace || ""}
+                onChange={(value) =>
+                  setOpportunity({
+                    ...opportunity,
+                    workspaceId: value?._id || "",
+                  })
+                }
+                label={"Workspace"}
+                placeholder={"Please Select Workspace"}
+                options={allworkspaces ?? []}
+              />
+              <div className="mt-2 flex justify-end">
+                <button
+                  onClick={onWorkspaceAddClick}
+                  className="flex items-center gap-2 text-app-blue text-xs"
+                >
+                  <div className="border border-app-blue">
+                    <PlusIcon className="w-3 h-3" />
+                  </div>
+                  Add New
+                </button>
+              </div>
+            </div>
+            <div>
             <MainMultipleSelectTeam
               key={JSON.stringify(opportunity.team)}
               disabled={loading}
@@ -629,6 +644,18 @@ export default function CreateUpdateModal({
               // options={teamMembers.map(member => ({ _id: member._id, name: member.name }))}
               options={teamMembers}
             />
+            <div className="mt-2 flex justify-end">
+                <button
+                  onClick={onTeamMemberAddClick}
+                  className="flex items-center gap-2 text-app-blue text-xs"
+                >
+                  <div className="border border-app-blue">
+                    <PlusIcon className="w-3 h-3" />
+                  </div>
+                  Add New
+                </button>
+              </div>
+            </div>
             <div>
               <MainMultipleSelect
                 key={JSON.stringify(opportunity.partners)}

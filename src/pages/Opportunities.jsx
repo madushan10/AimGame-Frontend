@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import AuthenticatedLayout from '../layouts/AuthenticatedLayout'
 import Divider from '@mui/material/Divider';
-import { ChevronUpDownIcon, PlusIcon, ArrowPathIcon, EllipsisVerticalIcon, ArrowUpRightIcon, PencilSquareIcon,TrashIcon } from '@heroicons/react/24/solid'
+import { ChevronUpDownIcon, PlusIcon, ArrowPathIcon, EllipsisVerticalIcon, ArrowUpRightIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
 import TableProvider from '../components/TableProvider'
 import Chip from '@mui/material/Chip';
 import Avatar from '@mui/material/Avatar';
@@ -15,10 +15,12 @@ import PartnerCreateModal from '../components/Authenticated/Partner/CreateUpdate
 import TaskCreateModal from '../components/Authenticated/Task/CreateUpdateModal';
 import api from '../services/api';
 import ClientCreateUpdateModal from '../components/Authenticated/Client/ClientCreateUpdateModal';
+import WorkspacesCreateUpdateModal from '../components/Authenticated/Workspaces/WorkspacesCreateUpdateModal';
+import TeamCreateUpdateModel from '../components/Authenticated/Team/TeamCreateUpdateModel';
 
 
 
-export default function Opportunities({ title }) { 
+export default function Opportunities({ title }) {
     document.title = title
 
     const [loading, setLoading] = useState(false)
@@ -28,6 +30,8 @@ export default function Opportunities({ title }) {
     const [tempData, setTempData] = useState([]);
     const [roleMappingShow, setRoleMappingShow] = useState(false)
     const [partnerCreateModalShow, setPartnerCreateModalShow] = useState(false)
+    const [workspaceCreateModalShow, setWorkspaceCreateModalShow] = useState(false)
+    const [teamCreateModalShow, setTeamCreateModalShow] = useState(false)
     const [taskCreateModalShow, setTaskCreateModalShow] = useState(false)
     const [clientCreateShow, setClientCreateShow] = useState(false)
     const [workspaces, setWorkspaces] = useState([]);
@@ -40,13 +44,12 @@ export default function Opportunities({ title }) {
     const [tasks, setTasks] = useState([]);
     const [mappingRoles, setMappingRoles] = useState([]);
     const [industryTypes, setIndustryTypes] = useState([]);
-
-
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
     const updateTempData = (data) => {
         setTempData(data);
-      };
+    };
+
 
     useEffect(() => {
         setTimeout(() => {
@@ -67,7 +70,6 @@ export default function Opportunities({ title }) {
         }
         return "#9c9c9c"
     }
-
 
     const fetchTasks = async () => {
         try {
@@ -95,7 +97,6 @@ export default function Opportunities({ title }) {
             console.error('Error fetching workspaces:', error);
         }
     };
-    console.log("funnelStatus ---: ", funnelStatus)
 
     const fetchClients = async () => {
         try {
@@ -117,7 +118,7 @@ export default function Opportunities({ title }) {
             document.getElementById("page-loader").style.display = 'none';
         }
     };
-    console.log("Opp Data : ", tempData)
+
     const deleteOpertunity = async (id) => {
         try {
             const response = await api.delete(`/api-v1/opportunities/${id}`);
@@ -126,6 +127,7 @@ export default function Opportunities({ title }) {
             console.error('Error fetching workspaces:', error);
         }
     };
+
     const fetchOpportunitiesMappingRoles = async () => {
         try {
             const response = await api.get(`/api-v1/opportunities/65867fc7cbe698d4c8d1d716/mapping-role`);
@@ -134,7 +136,6 @@ export default function Opportunities({ title }) {
             console.error('Error fetching opportunities:', error);
         }
     };
-    // console.log("opMappingRoles : - ", mappingRoles);
 
     // const fetchOpportunities = async () => {
     //     try {
@@ -176,7 +177,6 @@ export default function Opportunities({ title }) {
         }
     };
 
-    console.log("team members : ", teamMembers)
     const fetchIndustryTypes = async () => {
         try {
             const response = await api.get('/api-v1/industryTypes');
@@ -186,8 +186,6 @@ export default function Opportunities({ title }) {
             console.error('Error fetching data:', error);
         }
     };
-
-
 
     const fetchPartners = async () => {
         try {
@@ -216,11 +214,7 @@ export default function Opportunities({ title }) {
     //     console.log("Opportunities : ", tempData)
     // }, [tempData])
 
-
-
     const paginatedData = tempData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
-    // console.log("Mapping Roles : ", mappingRoles)
 
 
     return (
@@ -234,7 +228,7 @@ export default function Opportunities({ title }) {
                         />
                     </button> */}
                     <button onClick={() => setShowSearch(true)} className='flex justify-center items-center text-white bg-app-gray-5 px-5 py-2 w-full lg:w-fit rounded-lg' >Search</button>
-                    <a href={'/opportunities'} className='flex justify-center items-center text-white bg-app-gray-5 px-5 py-2 w-full lg:w-fit rounded-lg' style={{cursor: 'pointer'}} >See All</a>
+                    <a href={'/opportunities'} className='flex justify-center items-center text-white bg-app-gray-5 px-5 py-2 w-full lg:w-fit rounded-lg' style={{ cursor: 'pointer' }} >See All</a>
                 </div>
                 <button onClick={() => {
                     setShow(true)
@@ -295,7 +289,7 @@ export default function Opportunities({ title }) {
                                 Funnel Status
                             </th> */}
                             <th scope="col" className="py-5 px-6 border-b">
-                            Funnel Status
+                                Funnel Status
                             </th>
                             <th scope="col" className="py-5 px-6 border-b">
                                 Team
@@ -418,6 +412,8 @@ export default function Opportunities({ title }) {
                 onClose={() => setShow(false)}
                 onOpMappingAddClick={() => setRoleMappingShow(true)}
                 onPartnerAddClick={() => setPartnerCreateModalShow(true)}
+                onWorkspaceAddClick={() => setWorkspaceCreateModalShow(true)}
+                onTeamMemberAddClick={() => setTeamCreateModalShow(true)}
                 onTaskAddClick={() => setTaskCreateModalShow(true)}
             />
 
@@ -442,6 +438,19 @@ export default function Opportunities({ title }) {
                 show={partnerCreateModalShow}
                 onClose={() => setPartnerCreateModalShow(false)}
             />
+
+            <WorkspacesCreateUpdateModal
+                data={selectedData}
+                show={workspaceCreateModalShow}
+                onClose={() => setWorkspaceCreateModalShow(false)}
+            />
+
+            <TeamCreateUpdateModel
+                data={selectedData}
+                show={teamCreateModalShow}
+                onClose={() => setTeamCreateModalShow(false)}
+            />
+
             <TaskCreateModal
                 data={null}
                 rowID={selectedData}

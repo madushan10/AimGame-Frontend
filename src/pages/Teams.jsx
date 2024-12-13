@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
 import AuthenticatedLayout from '../layouts/AuthenticatedLayout'
-import MainInput from '../components/MainInput'
-import { PlusIcon, ArrowPathIcon, EllipsisVerticalIcon, PencilSquareIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { PlusIcon, ArrowPathIcon, PencilSquareIcon } from '@heroicons/react/24/solid'
 import TableProvider from '../components/TableProvider'
 import Divider from '@mui/material/Divider';
 import Avatar from '@mui/material/Avatar';

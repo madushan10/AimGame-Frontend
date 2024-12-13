@@ -348,6 +348,7 @@ export default function Partners({ title }) {
         workspaces={workspaces}
         show={show}
         onClose={() => setShow(false)}
+        clientsData={clients}
       />
     </AuthenticatedLayout>
   );
