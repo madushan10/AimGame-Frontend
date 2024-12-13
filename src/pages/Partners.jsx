@@ -16,7 +16,7 @@ import api from "../services/api";
 import MainSelectNoId from "../components/MainSelectNoId";
 
 export default function Partners({ title }) {
-  document.title = title;
+  document.title = title; 
 
   const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
@@ -66,7 +66,10 @@ export default function Partners({ title }) {
   }, []);
 
   useEffect(() => {
-    const fetchWorkspaces = async () => {
+    fetchPartners();
+      }, []);
+  
+    const fetchPartners = async () => {
       try {
         document.getElementById("page-loader").style.display = "block";
         const response = await api.get("/api-v1/partners");
@@ -77,9 +80,6 @@ export default function Partners({ title }) {
         document.getElementById("page-loader").style.display = "none";
       }
     };
-
-    fetchWorkspaces();
-  }, []);
 
   useEffect(() => {
     const fetchWorkspaces = async () => {
@@ -182,6 +182,7 @@ export default function Partners({ title }) {
           onClick={() => {
             setShow(true);
             setSelectedData(null);
+         
           }}
           className="flex items-center gap-3 justify-center bg-app-blue-2 rounded-lg w-full lg:w-fit px-6 py-2 text-white"
         >
@@ -251,7 +252,13 @@ export default function Partners({ title }) {
             <div className="text-lg lg:text-2xl text-app-blue font-semibold">
               All Partners
             </div>
-            <button onClick={() => setLoading(true)}>
+            <button 
+            
+            onClick={() => {
+              setLoading(true);
+              fetchPartners();
+             }}
+            >
               <ArrowPathIcon
                 className={`${loading ? "animate-spin" : ""} w-6 h-6`}
               />

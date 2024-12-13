@@ -69,48 +69,68 @@ export default function ClientCard() {
                     <EllipsisVerticalIcon className='w-8 h-8' />
                 </button> */}
             </div>
-            <Divider />
+            <Divider /> 
             <TableProvider data={tempData} loading={loading} emptyMessage="No Clients Found" >
                 <thead className="text-xs text-app-blue uppercase bg-white">
-                    <tr>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
-                            Company Name
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
-                            Industry Type
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
-                            Email
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
-                            Contact
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b">
-                            Address
-                        </th>
-                    </tr>
+                <tr>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                ID
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                            Reference No
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Logo
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Created Date
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Company Name
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Industry Type
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Business Address
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Contact
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Business Email
+                            </th>
+                           
+                        </tr>
                 </thead>
+                
                 <tbody>
                     {tempData?.slice(0, 10).map((row, index) => {
+                         const formattedDate = new Date(row?.createdAt).toLocaleDateString();
                         return (
                             <tr key={index} className="bg-white border-b text-gray-900 ">
-                                <td className="py-3 px-6" >
-                                <Link to={`/client/${row._id}`}>
-                  <div className="flex items-center gap-2">
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={row?.photo}
-                      sx={{ border: "0.5px solid #ABB3BB" }}
-                    />
-                    <div>{row?.companyName}</div>
-                  </div>
-                </Link>
-                                </td>
-                                <td className="py-3 px-6" >{row?.industryTypeId ? row.industryTypeId.name : "-"}</td>
-                                <td className="py-3 px-6" >{row?.email}</td>
-                                <td className="py-3 px-6" >{row?.phone}</td>
-                                <td className="py-3 px-6" >{row?.address}</td>
-                            </tr>
+                                    <td className="py-5 px-6" >{row?._id}</td>
+                                    <td className="py-5 px-6" >{row?.refNo}</td>
+                                    <td className="py-3 px-6" >
+                                                        <Link to={`/client/${row._id}`}>
+                                        <div className="flex items-center gap-2">
+                                            <Avatar
+                                            alt="Remy Sharp"
+                                            src={row?.photo}
+                                            sx={{ border: "0.5px solid #ABB3BB" }}
+                                            />
+                                            <div>{row?.name}</div>
+                                        </div>
+                                        </Link>
+                                    </td>
+                                    <td className="py-5 px-6" >{formattedDate}</td>
+                                    <td className="py-5 px-6" >{row?.name}</td>
+                                    <td className="py-5 px-6" >{row?.industryTypeId ? row.industryTypeId.name : "-"}</td>
+                                    <td className="py-5 px-6" >{row?.address}</td>
+                                    <td className="py-5 px-6" >{row?.phone}</td>
+                                    <td className="py-5 px-6" >{row?.email}</td>
+                                    
+                                </tr>
                         )
                     })}
                 </tbody>

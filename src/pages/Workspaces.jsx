@@ -21,20 +21,20 @@ export default function Events({ title }) {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
     useEffect(() => {
-        const fetchWorkspaces = async () => {
-            try {
-                document.getElementById("page-loader").style.display = 'block';
-                const response = await api.get(`/api-v1/workspaces/user/${localStorage.userID}`);
-                setTempData(response.data.data);
-                document.getElementById("page-loader").style.display = 'none';
-            } catch (error) {
-                console.error('Error fetching workspaces:', error);
-                document.getElementById("page-loader").style.display = 'none';
-            }
-        };
-
         fetchWorkspaces();
-    }, []);
+        }, []);
+
+    const fetchWorkspaces = async () => {
+        try {
+            document.getElementById("page-loader").style.display = 'block';
+            const response = await api.get(`/api-v1/workspaces/user/${localStorage.userID}`);
+            setTempData(response.data.data);
+            document.getElementById("page-loader").style.display = 'none';
+        } catch (error) {
+            console.error('Error fetching workspaces:', error);
+            document.getElementById("page-loader").style.display = 'none';
+        }
+    };
     console.error('Fetching workspaces:', tempData);
     const paginatedData = tempData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
@@ -61,7 +61,10 @@ export default function Events({ title }) {
                     <div className='flex items-center gap-5' >
                         <div className="text-lg lg:text-2xl text-app-blue font-semibold" >Workspaces</div>
                         <button
-                            onClick={() => setLoading(true)}
+                           onClick={() => {
+                            setLoading(true);
+                            fetchWorkspaces();
+                        }}
                         >
                             <ArrowPathIcon className={`${loading ? "animate-spin" : ""} w-6 h-6`} />
                         </button>

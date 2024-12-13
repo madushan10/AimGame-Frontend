@@ -24,6 +24,8 @@ export default function Teams({ title }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   useEffect(() => {
+    fetchOpportunities();
+          }, []);
     const fetchOpportunities = async () => {
       try {
         document.getElementById("page-loader").style.display = "block";
@@ -37,9 +39,6 @@ export default function Teams({ title }) {
         document.getElementById("page-loader").style.display = "none";
       }
     };
-
-    fetchOpportunities();
-  }, []);
   const paginatedData = tempData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -78,7 +77,12 @@ export default function Teams({ title }) {
             <div className="text-lg lg:text-2xl text-app-blue font-semibold">
               Presales
             </div>
-            <button onClick={() => setLoading(true)}>
+            <button 
+             onClick={() => {
+              setLoading(true);
+              fetchOpportunities();
+          }}
+          >
               <ArrowPathIcon
                 className={`${loading ? "animate-spin" : ""} w-6 h-6`}
               />

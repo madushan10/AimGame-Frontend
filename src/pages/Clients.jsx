@@ -12,7 +12,7 @@ import SearchModal from '../components/Authenticated/Client/SearchModal';
 
 export default function Clients({ title }) {
     document.title = title
-
+ 
     const [loading, setLoading] = useState(false)
     const [show, setShow] = useState(false)
     const [selectedData, setSelectedData] = useState(null)
@@ -128,6 +128,11 @@ export default function Clients({ title }) {
             console.error('Error fetching data:', error);
         }
     };
+    useEffect(() => {
+        fetchClients();
+        fetchAllWorkspaces();
+    }, []);
+
     const fetchClients = async () => {
         try {
             document.getElementById("page-loader").style.display = 'block';
@@ -141,10 +146,7 @@ export default function Clients({ title }) {
         }
     };
 
-    useEffect(() => {
-        fetchClients();
-        fetchAllWorkspaces();
-    }, []);
+ 
 
     const fetchSearchResults = async () => {
         if (searchValue.trim() !== '') {
@@ -195,7 +197,10 @@ export default function Clients({ title }) {
                     <div className='flex items-center gap-5' >
                         <div className="text-lg lg:text-2xl text-app-blue font-semibold" >All Clients</div>
                         <button
-                            onClick={() => setLoading(true)}
+                            onClick={() => {
+                                setLoading(true);
+                                fetchClients();
+                            }}
                         >
                             <ArrowPathIcon className={`${loading ? "animate-spin" : ""} w-6 h-6`} />
                         </button>

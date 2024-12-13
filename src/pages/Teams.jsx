@@ -23,8 +23,10 @@ export default function Teams({ title }) {
     const updateTempData = (data) => {
         setTempData(data);
       };
+      useEffect(() => {
+        fetchOpportunities();
+    }, []);
 
-    useEffect(() => {
         const fetchOpportunities = async () => {
             try {
                 document.getElementById("page-loader").style.display = 'block';
@@ -37,8 +39,7 @@ export default function Teams({ title }) {
             }
         };
 
-        fetchOpportunities();
-    }, []);
+
     const paginatedData = tempData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     useEffect(() => {
@@ -61,7 +62,7 @@ export default function Teams({ title }) {
                 </div>
  
                 <button onClick={() => {
-                    setShow(true)
+                    setShow(true) 
                     setSelectedData(null)
                 }} className='flex items-center gap-3 justify-center bg-app-blue-2 rounded-lg w-full lg:w-fit px-6 py-2 text-white' >
                     <PlusIcon className='w-6 h-6 text-white' />
@@ -73,7 +74,10 @@ export default function Teams({ title }) {
                     <div className='flex items-center gap-5' >
                         <div className="text-lg lg:text-2xl text-app-blue font-semibold" >All Team Members</div>
                         <button
-                            onClick={() => setLoading(true)}
+                            onClick={() => {
+                                setLoading(true);
+                                fetchOpportunities();
+                            }}
                         >
                             <ArrowPathIcon className={`${loading ? "animate-spin" : ""} w-6 h-6`} />
                         </button>

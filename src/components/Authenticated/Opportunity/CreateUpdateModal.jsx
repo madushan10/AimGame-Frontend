@@ -198,7 +198,7 @@ export default function CreateUpdateModal({
 
     const numberRegex = /^[0-9]+$/;
 
-    if (!numberRegex.test(opportunity.refNo || opportunity.refNo === "")) {
+    if (!numberRegex.test(opportunity.referenceNumber || opportunity.referenceNumber === "")) {
       setError("Invalid reference number format");
       return;
     }
@@ -282,7 +282,7 @@ export default function CreateUpdateModal({
 
     const numberRegex = /^[0-9]+$/;
 
-    if (!numberRegex.test(opportunity.refNo || opportunity.refNo === "")) {
+    if (!numberRegex.test(opportunity.referenceNumber || opportunity.referenceNumber === "")) {
       setError("Invalid reference number format");
       return;
     }

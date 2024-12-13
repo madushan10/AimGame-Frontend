@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import AuthenticatedLayout from '../layouts/AuthenticatedLayout'
 import Divider from '@mui/material/Divider';
-import { ChevronUpDownIcon, PlusIcon, ArrowPathIcon, EllipsisVerticalIcon, ArrowUpRightIcon, PencilSquareIcon } from '@heroicons/react/24/solid'
+import { ChevronUpDownIcon, PlusIcon, ArrowPathIcon, EllipsisVerticalIcon, ArrowUpRightIcon, PencilSquareIcon,TrashIcon } from '@heroicons/react/24/solid'
 import TableProvider from '../components/TableProvider'
 import Chip from '@mui/material/Chip';
 import Avatar from '@mui/material/Avatar';
@@ -18,7 +18,7 @@ import ClientCreateUpdateModal from '../components/Authenticated/Client/ClientCr
 
 
 
-export default function Opportunities({ title }) {
+export default function Opportunities({ title }) { 
     document.title = title
 
     const [loading, setLoading] = useState(false)
@@ -118,7 +118,14 @@ export default function Opportunities({ title }) {
         }
     };
     console.log("Opp Data : ", tempData)
-
+    const deleteOpertunity = async (id) => {
+        try {
+            const response = await api.delete(`/api-v1/opportunities/${id}`);
+            fetchOpportunities();
+        } catch (error) {
+            console.error('Error fetching workspaces:', error);
+        }
+    };
     const fetchOpportunitiesMappingRoles = async () => {
         try {
             const response = await api.get(`/api-v1/opportunities/65867fc7cbe698d4c8d1d716/mapping-role`);
@@ -243,7 +250,8 @@ export default function Opportunities({ title }) {
                         <div className="text-lg lg:text-2xl text-app-blue font-semibold" >All Opportunities</div>
                         <button
                             onClick={() => {
-                                setLoading(true)
+                                setLoading(true);
+                                fetchOpportunities();
                             }}
                         >
                             <ArrowPathIcon className={`${loading ? "animate-spin" : ""} w-6 h-6`} />
@@ -382,6 +390,13 @@ export default function Opportunities({ title }) {
                                             }}
                                         >
                                             <PencilSquareIcon className='w-6 h-6 text-app-blue-2' />
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                deleteOpertunity(row?._id)
+                                            }}
+                                        >
+                                            <TrashIcon className='w-6 h-6 text-app-blue-2' />
                                         </button>
                                     </td>
                                 </tr>

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Divider from '@mui/material/Divider';
-import { ArrowPathIcon, EllipsisVerticalIcon } from '@heroicons/react/24/solid'
+import { ChevronUpDownIcon, PlusIcon, ArrowPathIcon, EllipsisVerticalIcon, ArrowUpRightIcon, PencilSquareIcon } from '@heroicons/react/24/solid'
 import TableProvider from '../../TableProvider'
 import api from '../../../services/api';
-
+import Chip from '@mui/material/Chip';
+import AvatarGroup from '@mui/material/AvatarGroup';
+import Avatar from '@mui/material/Avatar';
 const tempData = [
     {
         opportunityName: "Sale of office supplies",
@@ -26,6 +28,18 @@ const tempData = [
 export default function OpportunityCard() {
     const [loading, setLoading] = useState(false)
     const [tempData, setTempData] = useState([]);
+    function getStatusColor(status) {
+        if (status == "start") {
+            return "#77C486"
+        }
+        if (status == "continue") {
+            return "#F3EF15"
+        }
+        if (status == "Completed") {
+            return "#E91818"
+        }
+        return "#9c9c9c"
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -67,38 +81,113 @@ export default function OpportunityCard() {
             <Divider />
             <TableProvider data={tempData} loading={loading} emptyMessage="No Opportunity Found" >
                 <thead className="text-xs text-app-blue uppercase bg-white">
-                    <tr>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
-                            Opportunity Name
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
-                            Stage
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
-                            Probability
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
+                <tr>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                ID
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Start Date
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                End Date
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Opportunity Name
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Stage
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Probability
+                            </th>
+                            {/* <th scope="col" className="py-5 px-6 border-b">
+                                Funnel Status
+                            </th> */}
+                            <th scope="col" className="py-5 px-6 border-b">
                             Funnel Status
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
-                            Rate
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b">
-                            Lead
-                        </th>
-                    </tr>
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Team
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Rate
+                            </th>
+                            <th scope="col" className="py-5 px-6 border-b">
+                                Lead
+                            </th>
+                           
+                        </tr>
                 </thead>
                 <tbody>
-                    {tempData?.slice(0, 10).map((row, index) => {
+                    {tempData?.slice(0, 8).map((row, index) => {
                         return (
                             <tr key={index} className="bg-white border-b text-gray-900 ">
-                                <td className="py-3 px-6" >{row?.name}</td>
-                                <td className="py-3 px-6" >{row?.funnelStatusId ? row.funnelStatusId.stage : "-"}</td>
-                                <td className="py-3 px-6" >{row?.probability}</td>
-                                <td className="py-3 px-6" >{row?.funnelStatusId ? row.funnelStatusId.status : "-"}</td>
-                                <td className="py-3 px-6" >{row?.funnelStatusId ? row.funnelStatusId.rate : "-"}</td>
-                                <td className="py-3 px-6" >{row?.leadId ? row.leadId.name : "-"}</td>
-                            </tr>
+                            <td className="py-5 px-6" >{row?.referenceNumber}</td>
+                            <td className="py-5 px-6">
+                                {row?.creationDate ? new Date(row.creationDate).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                }) : ""}
+                            </td>
+
+                            {/* <td className="py-5 px-6">{row?.completionDate ? new Date(row?.completionDate).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric',
+                            }) : ""}</td> */}
+                            <td className="py-5 px-6">
+                                {row?.completionDate ?
+                                    new Date(row?.completionDate).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric',
+                                    }) :
+                                    ""}
+                            </td>
+                            <td className="py-5 px-6" >{row?.name}</td>
+                            <td className="py-5 px-6" >{row?.funnelStatusId ? row.funnelStatusId.stage : "-"}</td>
+                            <td className="py-5 px-6" >{row?.funnelStatusId ? row.funnelStatusId.level : "-"}%</td>
+                            {/* <td className="py-5 px-6" >{row?.funnelStatusId ? row.funnelStatusId.status : "-"}</td> */}
+                            <td className="py-5 px-6" >
+                                <Chip
+                                    sx={{ borderColor: getStatusColor(row?.funnelStatusId ? row.funnelStatusId.status : "-"), color: getStatusColor(row?.status), fontWeight: "700", textTransform: "uppercase" }}
+                                    icon={<ArrowUpRightIcon style={{ color: getStatusColor(row?.funnelStatusId ? row.funnelStatusId.status : "-") }} className='w-5 h-5' />}
+                                    label={row?.funnelStatusId ? row.funnelStatusId.status : "-"}
+                                    variant="outlined"
+                                />
+                            </td>
+                            {/* <td className="py-5 px-6" >
+                                <div>
+                                    <AvatarGroup
+                                        renderSurplus={(surplus) => <span>+{surplus.toString()[0]}</span>}
+                                        total={row?.team?.length}
+                                    >
+                                        {row?.team?.slice(0, 4)?.map((teamRow, teamIndex) => {
+                                            return (
+                                                <Avatar key={teamIndex} alt={teamRow?.name} src={teamRow?.image} />
+                                            )
+                                        })}
+                                    </AvatarGroup>
+                                </div>
+                            </td> */}
+                            <td className="py-5 px-6">
+                                <div>
+                                    <AvatarGroup
+                                        renderSurplus={(surplus) => <span>+{surplus.toString()[0]}</span>}
+                                        total={row?.team?.length}
+                                    >
+                                        {row?.team?.slice(0, 4)?.map((teamRow, teamIndex) => (
+                                            <Avatar key={teamIndex} alt={teamRow?.name} src={teamRow?.image} />
+                                        ))}
+                                    </AvatarGroup>
+                                </div>
+                            </td>
+
+                            <td className="py-5 px-6" >{row?.funnelStatusId ? row.funnelStatusId.rate : "-"}</td>
+                            <td className="py-5 px-6" >{row?.leadId ? row.leadId.name : "-"}</td>
+                           
+                        </tr>
                         )
                     })}
                 </tbody>

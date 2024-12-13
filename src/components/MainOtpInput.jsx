@@ -1,12 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 
 export default function MainOtpInput({ onOtpChange, onOtpComplete }) {
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const inputRefs = useRef([]);
-
-    // useEffect(() => {
-    //     onOtpChange(otp.join(''));
-    // }, [onOtpChange, otp]);
 
     const handleInputChange = (index, event) => {
         const value = event.target.value;
@@ -22,9 +18,10 @@ export default function MainOtpInput({ onOtpChange, onOtpComplete }) {
         if (index < otp.length - 1 && value !== '') {
             inputRefs.current[index + 1].focus();
         }
+
+        // Call onOtpComplete when the last input is filled
         if (index === otp.length - 1 && value !== '') {
             onOtpComplete(newOtp.join(''));
-
         }
     };
 
@@ -32,8 +29,15 @@ export default function MainOtpInput({ onOtpChange, onOtpComplete }) {
         event.preventDefault();
         const pastedData = event.clipboardData.getData('text/plain');
 
-        if (/^\d+$/.test(pastedData) && pastedData.length === 6) {
-            setOtp(pastedData.split(''));
+        if (/^\d+$/.test(pastedData) && pastedData.length === otp.length) {
+            const newOtp = pastedData.split('');
+            setOtp(newOtp);
+
+            // Automatically call onOtpComplete if the entire OTP is pasted
+            onOtpComplete(newOtp.join(''));
+
+            // Focus the last input field
+            inputRefs.current[otp.length - 1].focus();
         }
     };
 
@@ -44,7 +48,7 @@ export default function MainOtpInput({ onOtpChange, onOtpComplete }) {
     };
 
     return (
-        <div className='flex justify-between items-center w-full' >
+        <div className='flex justify-between items-center w-full'>
             {otp.map((digit, index) => (
                 <React.Fragment key={index}>
                     <div
@@ -59,15 +63,12 @@ export default function MainOtpInput({ onOtpChange, onOtpComplete }) {
                             onPaste={handleInputPaste}
                             maxLength={1}
                             className='w-full pl-4 lg:pl-5 h-full bg-transparent'
-        
                         />
                     </div>
                     {index === 2 && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="#D0D0D0" className="w-4 h-4 lg:w-6 lg:h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />
-                    </svg>
-                    }
+                    </svg>}
                 </React.Fragment>
-
             ))}
         </div>
     );

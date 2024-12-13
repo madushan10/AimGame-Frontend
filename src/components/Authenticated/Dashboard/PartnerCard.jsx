@@ -17,7 +17,7 @@ const tempData = [
 
 export default function PartnerCard() {
     const [loading, setLoading] = useState(false)
-    const [tempData, setTempData] = useState([]);
+    const [tempData, setTempData] = useState([]); 
 
     useEffect(() => {
         
@@ -63,38 +63,53 @@ export default function PartnerCard() {
             <Divider />
             <TableProvider data={tempData} loading={loading} emptyMessage="No Partners Found" >
                 <thead className="text-xs text-app-blue uppercase bg-white">
-                    <tr>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
-                            Name
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
-                            Company
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
-                            Account Name
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
-                            Designation
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b border-r">
-                            Contact
-                        </th>
-                        <th scope="col" className="py-3 px-6 border-b">
-                            Email
-                        </th>
-                    </tr>
+                <tr>
+              <th scope="col" className="py-5 px-6 border-b">
+                ID
+              </th>
+              <th scope="col" className="py-5 px-6 border-b">
+                Date
+              </th>
+              <th scope="col" className="py-5 px-6 border-b">
+                Company
+              </th>
+              <th scope="col" className="py-5 px-6 border-b">
+                Name
+              </th>
+              <th scope="col" className="py-5 px-6 border-b">
+                Designation
+              </th>
+              <th scope="col" className="py-5 px-6 border-b">
+                Contact
+              </th>
+              <th scope="col" className="py-5 px-6 border-b">
+                Email
+              </th>
+
+            </tr>
                 </thead>
                 <tbody>
-                    {tempData?.slice(0, 10).map((row, index) => {
+                    {tempData?.slice(0, 7).map((row, index) => {
                         return (
                             <tr key={index} className="bg-white border-b text-gray-900 ">
-                                <td className="py-3 px-6" >{row?.name}</td>
-                                <td className="py-3 px-6" >{row?.company}</td>
-                                <td className="py-3 px-6" >{row?.accountName}</td>
-                                <td className="py-3 px-6" >{row?.designation}</td>
-                                <td className="py-3 px-6" >{row?.clientId ? row.clientId.phone : "-"}</td>
-                                <td className="py-3 px-6" >{row?.clientId ? row.clientId.email : "-"}</td>
-                            </tr>
+                            <td className="py-5 px-6">{row?._id}</td>
+                            <td className="py-5 px-6">{row?.date}</td>
+                            <td className="py-5 px-6">{row?.company}</td>
+                            <td className="py-5 px-6">{row?.name}</td>
+                            <td className="py-5 px-6">
+                              {row?.clientId ? row.clientId.designation : "-"}
+                            </td>
+                            <td className="py-5 px-6">
+                              {row?.clientId ? row.clientId.phone : "-"}
+                            </td>
+                            <td className="py-5 px-6">
+                              {row?.clientId ? row.clientId.email : "-"}
+                            </td>
+                            {/* <td className="py-5 px-6" >{row?.workspaceId ? row.workspaceId.contactEmail : "-"}</td> */}
+                            {/* <td className="py-5 px-6" >{row?.contacts}</td> */}
+          
+                           
+                          </tr>
                         )
                     })}
                 </tbody>

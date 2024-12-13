@@ -49,7 +49,8 @@ export default function CreateUpdateModal({
     setLoading(true);
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(client.email)) {
-      alert("Invalid email format");
+      setError("Invalid email format");
+      setLoading(false);
       return;
     }
 
@@ -57,7 +58,8 @@ export default function CreateUpdateModal({
 
     const nameRegex = /^[a-zA-Z\s]+$/;
     if (!nameRegex.test(client.name.trim() || client.name.trim() === "")) {
-      alert("Invalid name format");
+      setError("Invalid name format");
+      setLoading(false);
       return;
     }
 
@@ -66,16 +68,16 @@ export default function CreateUpdateModal({
     const phoneRegex = /^0\d{9}$/;
 
     if (!phoneRegex.test(client.phone || client.phone === "")) {
-      alert(
-        "Invalid phone number format. It should start with 0 and have 10 digits."
-      );
+      setError("Invalid phone number format. It should start with 0 and have 10 digits.");
+      setLoading(false);
       return;
     }
 
     const numberRegex = /^[0-9]+$/;
 
     if (!numberRegex.test(client.refNo)) {
-      alert("Invalid reference number format");
+      setError("Invalid reference number format");
+      setLoading(false);
       return;
     }
 
@@ -95,6 +97,7 @@ export default function CreateUpdateModal({
         setError(
           `Please fill in all required fields: ${missingFields.join(", ")}.`
         );
+        
         setSuccess(null);
         setLoading(false);
         return;
@@ -116,16 +119,20 @@ export default function CreateUpdateModal({
         const errorData = await response.json();
         setError(errorData.errors);
         setSuccess(null);
+        setLoading(false);
       } else {
         document.getElementById("page-loader").style.display = "none";
         setSuccess("Client created successfully");
         setError(null);
+        setLoading(false);
         onClose();
+
       }
     } catch (error) {
       console.error("Error creating Client:", error);
       document.getElementById("page-loader").style.display = "none";
       setError(error.message);
+      setLoading(false);
       setSuccess(null);
     }
     setLoading(false);
@@ -187,7 +194,8 @@ export default function CreateUpdateModal({
   async function onUpdate() {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(client.email)) {
-      alert("Invalid email format");
+      setError("Invalid email format");
+      setLoading(false);
       return;
     }
 
@@ -195,7 +203,8 @@ export default function CreateUpdateModal({
 
     const nameRegex = /^[a-zA-Z\s]+$/;
     if (!nameRegex.test(client.name.trim() || client.name.trim() === "")) {
-      alert("Invalid name format");
+      setError("Invalid name format");
+      setLoading(false);
       return;
     }
 
@@ -204,16 +213,17 @@ export default function CreateUpdateModal({
     const phoneRegex = /^0\d{9}$/;
 
     if (!phoneRegex.test(client.phone || client.phone === "")) {
-      alert(
-        "Invalid phone number format. It should start with 0 and have 10 digits."
-      );
+
+      setError("Invalid phone number format. It should start with 0 and have 10 digits.");
+      setLoading(false);
       return;
     }
 
     const numberRegex = /^[0-9]+$/;
 
     if (!numberRegex.test(client.refNo)) {
-      alert("Invalid reference number format");
+      setError("Invalid reference number format");
+      setLoading(false);
       return;
     }
 
@@ -233,6 +243,7 @@ export default function CreateUpdateModal({
         setError(
           `Please fill in all required fields: ${missingFields.join(", ")}.`
         );
+        
         setSuccess(null);
         return;
       }
@@ -253,10 +264,12 @@ export default function CreateUpdateModal({
         const errorData = await response.json();
         setError(errorData.errors);
         setSuccess(null);
+        setLoading(false);
       } else {
         document.getElementById("page-loader").style.display = "none";
         setSuccess("Client updated successfully");
         setError(null);
+        setLoading(false);
         onClose();
       }
     } catch (error) {
@@ -265,6 +278,7 @@ export default function CreateUpdateModal({
       setError("Error updating client:", error);
       document.getElementById("page-loader").style.display = "none";
       setSuccess(null);
+      setLoading(false);
     }
   }
 

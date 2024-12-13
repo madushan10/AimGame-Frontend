@@ -10,10 +10,10 @@ import api from "../../../services/api";
 const rates = [
   { id: 1, name: "1" },
   { id: 2, name: "2" },
-  { id: 2, name: "3" },
+  { id: 3, name: "3" },
 ];
 
-const initialState = {};
+const initialState = { name: "", accountName: "", rate: "", workspaceId: "" };
 
 export default function CreateUpdateModal({
   show,
@@ -24,14 +24,14 @@ export default function CreateUpdateModal({
 }) {
   const [partner, setPartner] = useState(initialState);
   const [loading, setLoading] = useState(false);
-  const [userData, setUserData] = useState();
-  // console.log(worspaces);
+  const [userData, setUserData] = useState([]);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   useEffect(() => {
     if (data) {
       setPartner(data);
-    }
-    if (!data) {
+    } else {
       setPartner(initialState);
     }
   }, [data]);
@@ -50,74 +50,84 @@ export default function CreateUpdateModal({
   }, []);
 
   async function onCreate() {
-    console.log("partner data : ", partner);
+    setError(null);
+    setSuccess(null);
+    setLoading(true);
 
-    //check name availability
+    console.log("Partner data:", partner);
 
-    const nameExists = userData.find((item) => item.name === partner.name);
-
+    // Check if partner name already exists
+    const nameExists = userData.some((item) => item.name === partner.name);
     if (nameExists) {
-      alert("Name already exists");
+      setError("Name already exists");
+      setLoading(false);
       return;
     }
 
-    //check account name availability
-
-    const accountNameExists = userData.find(
-      (item) => item.name === partner.accountName
+    // Check if account name already exists
+    const accountNameExists = userData.some(
+      (item) => item.accountName === partner.accountName
     );
-
     if (accountNameExists) {
-      alert("Name already exists");
+      setError("Account name already exists");
+      setLoading(false);
       return;
     }
 
-    //check name
-
+    // Validate name format
     const nameRegex = /^[a-zA-Z\s]+$/;
-    if (!nameRegex.test(partner.name.trim() || partner.name.trim() === "")) {
-      alert("Invalid name format");
+    if (!partner.name || !nameRegex.test(partner.name.trim())) {
+      setError("Invalid name format");
+      setLoading(false);
       return;
     }
 
-    if (!nameRegex.test(partner.accountName || partner.accountName === "")) {
-      alert("Invalid account name format");
+    if (!partner.accountName || !nameRegex.test(partner.accountName.trim())) {
+      setError("Invalid account name format");
+      setLoading(false);
       return;
     }
 
-    if (partner.rate === null || partner.rate === undefined) {
-      alert("Please select a rate");
+    // Validate rate selection
+    if (!partner.rate) {
+      setError("Please select a rate");
+      setLoading(false);
+      return;
+    }
+
+    // Validate workspace selection
+    if (!partner.workspaceId) {
+      setError("Please select a workspace");
+      setLoading(false);
       return;
     }
 
     try {
-      if (!partner.name || !partner.workspaceId || !partner.accountName) {
-        window.alert("Please fill in all required fields.");
-        return;
-      }
       document.getElementById("page-loader").style.display = "block";
       const response = await api.post("/api-v1/partners", partner);
 
       if (response.status === 201) {
         console.log("Partner created successfully");
+        setSuccess("Partner created successfully");
         document.getElementById("page-loader").style.display = "none";
-        window.alert("Partner created successfully");
         onClose();
       } else {
         console.error("Failed to create partner:", response.statusText);
+        setError("Failed to create partner");
         document.getElementById("page-loader").style.display = "none";
-        window.alert("Failed to create partner");
       }
     } catch (error) {
       console.error("Error creating partner:", error);
+      setError("Failed to create partner");
       document.getElementById("page-loader").style.display = "none";
-      window.alert("Failed to create partner");
+    } finally {
+      setLoading(false);
     }
   }
 
-  // console.log("partner data : ",partner);
-
   async function onUpdate() {
+    // Logic for updating the partner (if needed)
+    console.log("Updating partner:", partner);
     onClose();
   }
 
@@ -130,17 +140,14 @@ export default function CreateUpdateModal({
       leave="transition-opacity duration-150"
       leaveFrom="opacity-100"
       leaveTo="opacity-0"
-      className={
-        "w-screen h-screen absolute top-0 left-0 flex items-center justify-center bg-[#0000006d]"
-      }
+      className="w-screen h-screen absolute top-0 left-0 flex items-center justify-center bg-[#0000006d]"
     >
       <div className="bg-white shadow-lg rounded-md h-[90%] lg:h-fit w-[95%] lg:w-[70%]">
         <div className="bg-[#C5C5C533] h-14 flex justify-between items-center px-10">
           <div className="font-semibold">
             {data ? (
               <span>
-                View Partner -{" "}
-                <span className="text-app-blue-4">{data?.name}</span>
+                View Partner - <span className="text-app-blue-4">{data?.name}</span>
               </span>
             ) : (
               "Create New Partner"
@@ -173,7 +180,7 @@ export default function CreateUpdateModal({
             <MainSelect
               disabled={loading}
               value={workspaces?.find(
-                (row) => row?.name === partner?.workspaceId
+                (row) => row?._id === partner?.workspaceId
               )}
               onChange={(value) =>
                 setPartner({
@@ -188,7 +195,7 @@ export default function CreateUpdateModal({
 
             <MainSelect
               disabled={loading}
-              value={rates?.find((row) => row?.name == partner?.rate)}
+              value={rates?.find((row) => row?.name === partner?.rate)}
               onChange={(value) =>
                 setPartner({ ...partner, rate: value?.name })
               }
@@ -196,6 +203,10 @@ export default function CreateUpdateModal({
               placeholder={"Please Select Rate"}
               options={rates}
             />
+          </div>
+          <div className="px-10">
+            {error && <p className="text-red-500 mt-2 mb-2">{error}</p>}
+            {success && <p className="text-green-500 mt-2 mb-2">{success}</p>}
           </div>
           <div className="flex justify-center items-center gap-5 mb-5">
             <button
@@ -205,14 +216,6 @@ export default function CreateUpdateModal({
             >
               Cancel
             </button>
-            {/* <button
-                        onClick={() => {
-                            data ? onCreate() : onUpdate()
-                        }}
-                        disabled={loading}
-                        className='disabled:bg-app-gray flex items-center gap-3 bg-app-blue-2 rounded-lg w-fit px-10 py-2 text-white' >
-                        {data ? "Save" : "Create"}
-                    </button> */}
             <button
               onClick={onCreate}
               disabled={loading}
